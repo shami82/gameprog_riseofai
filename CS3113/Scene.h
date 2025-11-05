@@ -7,9 +7,10 @@
 struct GameState
 {
     Entity *zorp;
+    Entity *bg;
     Map *map;
 
-    std::vector<Entity*> enemies; // vector holding the dif enemies
+    // std::vector<Entity*> enemies; // vector holding the dif enemies
 
     Music bgm;
     Sound jumpSound;
@@ -39,10 +40,10 @@ public:
     Vector2     getOrigin()          const { return mOrigin;    }
     const char* getBGColourHexCode() const { return mBGColourHexCode; }
 
-    void clearEnemies(){
-        for (auto* e : mGameState.enemies) delete e;
-        mGameState.enemies.clear();
-    }
+    // void clearEnemies(){
+    //     for (auto* e : mGameState.enemies) delete e;
+    //     mGameState.enemies.clear();
+    // }
 };
 
 #endif

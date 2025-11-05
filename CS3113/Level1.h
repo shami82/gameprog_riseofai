@@ -1,4 +1,4 @@
-#include "Scene.h"
+#include "Start.h"
 
 #ifndef LEVEL1_H
 #define LEVEL1_H
@@ -22,6 +22,10 @@ private:
         1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1,
         1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1
     };
+    
+    Texture2D textureZorp;
+    Texture2D textureFallingBlock;
+    Texture2D textureBG;
 
 public:
     static constexpr float TILE_DIMENSION       = 60.0f,
