@@ -18,6 +18,7 @@ void Level1::initialise()
    textureZorp = LoadTexture("assets/zorpsheet.PNG");
    textureFallingBlock = LoadTexture("assets/plan1fall.png");
    textureBG = LoadTexture("assets/spacebg.PNG");
+   textureFlyer = LoadTexture("assets/flyer.PNG");
 
    /*
       ----------- BACKGROUND -----------
@@ -59,7 +60,8 @@ void Level1::initialise()
    Vector2 zorpScale = { TILE_DIMENSION, TILE_DIMENSION * (17.0f / 16.0f) };
 
    mGameState.zorp = new Entity(
-      {mOrigin.x - 300.0f, mOrigin.y - 300.0f}, // position
+      // {mOrigin.x - 300.0f, mOrigin.y - 300.0f}, // position
+      {TILE_DIMENSION * 3.0f, TILE_DIMENSION * 10.0f},
       // {mOrigin.x + TILE_DIMENSION / 2.0f - 2 * TILE_DIMENSION, mOrigin.y + TILE_DIMENSION - 5 * TILE_DIMENSION},
       zorpScale,                                // scale
       textureZorp,                              // texture file address
@@ -78,13 +80,29 @@ void Level1::initialise()
    mGameState.zorp->setAcceleration({0.0f, ACCELERATION_OF_GRAVITY});
 
    /*
+      ----------- FLYER -----------
+   */
+
+   mGameState.flyer = new Entity(
+      {TILE_DIMENSION * 11.5f, TILE_DIMENSION * 1.0f}, // starting position
+      { TILE_DIMENSION, TILE_DIMENSION },    // scale
+      textureFlyer,                          // texture
+      NPC                                    // entity type
+   );
+
+   mGameState.flyer->setSpeed(100);
+   mGameState.flyer->setAIType(WANDERER);
+   mGameState.flyer->setAcceleration({0.0f, 0.0f});
+   mGameState.flyer->setDirection(UP);
+
+   /*
       ----------- CAMERA -----------
    */
-   mGameState.camera = { 0 };                                    // zero initialize
-   mGameState.camera.target = mGameState.zorp->getPosition();    // camera follows player
-   mGameState.camera.offset = mOrigin;                           // camera offset to center of screen
-   mGameState.camera.rotation = 0.0f;                            // no rotation
-   mGameState.camera.zoom = 1.5f;                                // zoom more
+   // mGameState.camera = { 0 };                                    // zero initialize
+   // mGameState.camera.target = mGameState.zorp->getPosition();    // camera follows player
+   // mGameState.camera.offset = mOrigin;                           // camera offset to center of screen
+   // mGameState.camera.rotation = 0.0f;                            // no rotation
+   // mGameState.camera.zoom = 1.5f;                                // zoom more
 }
 
 void Level1::update(float deltaTime)
@@ -99,12 +117,41 @@ void Level1::update(float deltaTime)
       0               // col. entity count
    );
 
+   mGameState.flyer->update(
+      deltaTime,      // delta time / fixed timestep
+      nullptr,        // player
+      nullptr,        // map
+      nullptr,        // collidable entities
+      0               // col. entity count
+   );
+
+   if (mGameState.flyer){
+      Vector2 pos = mGameState.flyer->getPosition();
+
+      // top and bottom limits
+      static float flyerTopY = pos.y - 200.0f;
+      static float flyerBottomY = pos.y + 200.0f;
+
+      static bool movingUp = true; // current direction
+
+      if (movingUp){
+         pos.y -= mGameState.flyer->getSpeed() * deltaTime;
+         if (pos.y <= flyerTopY) movingUp = false; // go down
+      } 
+      else{
+         pos.y += mGameState.flyer->getSpeed() * deltaTime;
+         if (pos.y >= flyerBottomY) movingUp = true; // go up
+      }
+
+      mGameState.flyer->setPosition(pos);
+   }
+
    Vector2 currentPlayerPosition = { mGameState.zorp->getPosition().x, mOrigin.y };
 
    // TODO: FIX WIN AND LOSE CONDITION FOR THIS
    if (mGameState.zorp->getPosition().y > 800.0f) mGameState.nextSceneID = 1;
 
-   panCamera(&mGameState.camera, &currentPlayerPosition);
+   // panCamera(&mGameState.camera, &currentPlayerPosition);
 
    if (mGameState.zorp->getPosition().y > END_GAME_THRESHOLD){ // LOSE CONDITION
       mGameState.nextSceneID = 1; // CHANGE THIS TO THE LOSE SCREEN
@@ -119,6 +166,7 @@ void Level1::render()
    mGameState.bg->render();
    mGameState.zorp->render();
    mGameState.zorp->displayCollider();
+   mGameState.flyer->render();
    mGameState.map->render();
 
 }

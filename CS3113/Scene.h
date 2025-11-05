@@ -8,6 +8,7 @@ struct GameState
 {
     Entity *zorp;
     Entity *bg;
+    Entity *flyer;
     Map *map;
 
     // std::vector<Entity*> enemies; // vector holding the dif enemies

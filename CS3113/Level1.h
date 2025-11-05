@@ -12,7 +12,7 @@ private:
         1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, // this row has the falling platform blocks (col 6-9)
-        1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
+        1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,
         1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,
         1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1,
@@ -26,6 +26,7 @@ private:
     Texture2D textureZorp;
     Texture2D textureFallingBlock;
     Texture2D textureBG;
+    Texture2D textureFlyer;
 
 public:
     static constexpr float TILE_DIMENSION       = 60.0f,
