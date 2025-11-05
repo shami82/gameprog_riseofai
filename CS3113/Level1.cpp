@@ -59,7 +59,8 @@ void Level1::initialise()
    Vector2 zorpScale = { TILE_DIMENSION, TILE_DIMENSION * (17.0f / 16.0f) };
 
    mGameState.zorp = new Entity(
-      {mOrigin.x - 50.0f, mOrigin.y - 100.0f}, // position
+      {mOrigin.x - 300.0f, mOrigin.y - 300.0f}, // position
+      // {mOrigin.x + TILE_DIMENSION / 2.0f - 2 * TILE_DIMENSION, mOrigin.y + TILE_DIMENSION - 5 * TILE_DIMENSION},
       zorpScale,                                // scale
       textureZorp,                              // texture file address
       ATLAS,                                    // single image or atlas?
@@ -77,35 +78,13 @@ void Level1::initialise()
    mGameState.zorp->setAcceleration({0.0f, ACCELERATION_OF_GRAVITY});
 
    /*
-      ----------- FALLING BLOCK -----------
-   */
-   // for (int i = 0; i < 4; i++){
-   //    Vector2 blockPos = {
-   //       mOrigin.x - 60.0f + (6 + i) * TILE_DIMENSION,
-   //       mOrigin.y - 260.0f
-   //    };
-
-   //    Entity* fallingblock = new Entity(
-   //       blockPos,                           // position
-   //       { TILE_DIMENSION, TILE_DIMENSION },    // scale
-   //       textureFallingBlock,             // texture file address
-   //       BLOCK                                  // entity type
-   //    );
-
-   //    fallingblock->setAcceleration({0.0f, 0.0f});
-   //    fallingblock->activate();
-
-   //    mGameState.enemies.push_back(fallingblock); // added to gamestate
-   // }
-
-   /*
       ----------- CAMERA -----------
    */
-   // mGameState.camera = { 0 };                                    // zero initialize
-   // mGameState.camera.target = mGameState.zorp->getPosition();    // camera follows player
-   // mGameState.camera.offset = mOrigin;                           // camera offset to center of screen
-   // mGameState.camera.rotation = 0.0f;                            // no rotation
-   // mGameState.camera.zoom = 1.0f;                                // default zoom
+   mGameState.camera = { 0 };                                    // zero initialize
+   mGameState.camera.target = mGameState.zorp->getPosition();    // camera follows player
+   mGameState.camera.offset = mOrigin;                           // camera offset to center of screen
+   mGameState.camera.rotation = 0.0f;                            // no rotation
+   mGameState.camera.zoom = 1.5f;                                // zoom more
 }
 
 void Level1::update(float deltaTime)
@@ -125,46 +104,12 @@ void Level1::update(float deltaTime)
    // TODO: FIX WIN AND LOSE CONDITION FOR THIS
    if (mGameState.zorp->getPosition().y > 800.0f) mGameState.nextSceneID = 1;
 
-   // panCamera(&mGameState.camera, &currentPlayerPosition);
+   panCamera(&mGameState.camera, &currentPlayerPosition);
 
    if (mGameState.zorp->getPosition().y > END_GAME_THRESHOLD){ // LOSE CONDITION
       mGameState.nextSceneID = 1; // CHANGE THIS TO THE LOSE SCREEN
    }
 
-   // for (Entity* block : mGameState.enemies){ // logic for falling blocks
-   //    if (!block->isActive()) continue;
-
-   //    Vector2 blockPos = block->getPosition();
-   //    Vector2 blockVel = block->getVelocity();
-   //    Vector2 blockAcc = block->getAcceleration();
-
-   //    // fall if zorp is below it
-   //    float blockLeft = blockPos.x - block->getScale().x / 2;
-   //    float blockRight = blockPos.x + block->getScale().x / 2;
-   //    float playerLeft = currentPlayerPosition.x - mGameState.zorp->getScale().x / 2;
-   //    float playerRight = currentPlayerPosition.x + mGameState.zorp->getScale().x / 2;
-
-   //    bool playerUnderBlock = (playerRight > blockLeft) && (playerLeft < blockRight) && (currentPlayerPosition.y > blockPos.y);
-
-   //    if (playerUnderBlock && blockAcc.y == 0.0f){ // block start falling
-   //       block->setAcceleration({0.0f, ACCELERATION_OF_GRAVITY - 200.0f});
-   //    }
-
-   //    // udpate the velocity and position
-   //    blockPos.x += blockVel.x * deltaTime;
-   //    blockPos.y += blockVel.y * deltaTime;
-   //    block->setPosition(blockPos);
-
-   //    if (block->isCollidingBottom()){ // collision with map/platform -> stop falling
-   //       if (block->checkCollisionWithMap(mGameState.map)){
-   //          block->setVelocity({0.0f, 0.0f});
-   //       }
-   //       // TODO: fix the lose condition
-   //       else if (block->isColliding(mGameState.zorp)){ // LOSE CONDITION
-   //          mGameState.nextSceneID = 1;
-   //       }
-   //    }
-   // }
 }
 
 void Level1::render()
@@ -182,7 +127,6 @@ void Level1::shutdown()
    delete mGameState.bg;
    delete mGameState.zorp;
    delete mGameState.map;
-   // clearEnemies();
 
    // UnloadMusicStream(mGameState.bgm);
    // UnloadSound(mGameState.jumpSound);

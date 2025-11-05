@@ -43,9 +43,9 @@ void initialise()
     InitAudioDevice();
 
     gStart = new Start(ORIGIN, "#000000");
-    gLevel1 = new Level1(ORIGIN, "#C0897E");
-    // gLevel2 = new Level2(ORIGIN, "#011627");
-    // gLevel3 = new Level3(ORIGIN, "#011405");
+    gLevel1 = new Level1(ORIGIN, "#0D171f");
+    // gLevel2 = new Level2(ORIGIN, "#0D171f");
+    // gLevel3 = new Level3(ORIGIN, "#0D171f");
 
     gLevels.push_back(gStart);
     gLevels.push_back(gLevel1);
@@ -60,7 +60,7 @@ void initialise()
 void processInput() 
 {
     if (!(gCurrentScene->getState().zorp)) return;
-    
+
     gCurrentScene->getState().zorp->resetMovement();
 
     if      (IsKeyDown(KEY_A)) gCurrentScene->getState().zorp->moveLeft();
@@ -103,11 +103,17 @@ void update()
 void render()
 {
     BeginDrawing();
-    // BeginMode2D(gCurrentScene->getState().camera);
 
-    gCurrentScene->render();
+    // only use camera when level, not startscreen
+    if (gCurrentScene->getState().camera.target.x != 0 || gCurrentScene->getState().camera.target.y != 0){
+        BeginMode2D(gCurrentScene->getState().camera);
+        gCurrentScene->render();
+        EndMode2D();
+    } 
+    else{
+        gCurrentScene->render();
+    }
 
-    EndMode2D();
     EndDrawing();
 }
 
