@@ -71,8 +71,8 @@ void Level1::initialise()
 
    mGameState.zorp->setJumpingPower(550.0f);
    mGameState.zorp->setColliderDimensions({
-      mGameState.zorp->getScale().x * 0.9f,
-      mGameState.zorp->getScale().y * 0.9f
+      mGameState.zorp->getScale().x / 1.5f,
+      mGameState.zorp->getScale().y / 1.1f
    });
    mGameState.zorp->setSpeed(200);
    mGameState.zorp->setAcceleration({0.0f, ACCELERATION_OF_GRAVITY});
@@ -118,6 +118,7 @@ void Level1::render()
 
    mGameState.bg->render();
    mGameState.zorp->render();
+   mGameState.zorp->displayCollider();
    mGameState.map->render();
 
 }
