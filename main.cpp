@@ -4,7 +4,7 @@
 constexpr int SCREEN_WIDTH     = 990,
               SCREEN_HEIGHT    = 720,
               FPS              = 120,
-              NUMBER_OF_LEVELS = 2; //4
+              NUMBER_OF_LEVELS = 2; //6
 
 constexpr Vector2 ORIGIN      = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
             
@@ -108,17 +108,17 @@ void render()
 {
     BeginDrawing();
 
-    // // only use camera when level, not startscreen
-    // if (gCurrentScene->getState().camera.target.x != 0 || gCurrentScene->getState().camera.target.y != 0){
-    //     BeginMode2D(gCurrentScene->getState().camera);
-    //     gCurrentScene->render();
-    //     EndMode2D();
-    // } 
-    // else{
-    //     gCurrentScene->render();
-    // }
+    // only use camera when level, not startscreen
+    if (gCurrentScene->getState().camera.target.x != 0 || gCurrentScene->getState().camera.target.y != 0){
+        BeginMode2D(gCurrentScene->getState().camera);
+        gCurrentScene->render();
+        EndMode2D();
+    } 
+    else{
+        gCurrentScene->render();
+    }
 
-    gCurrentScene->render();
+    // gCurrentScene->render();
 
     EndDrawing();
 }

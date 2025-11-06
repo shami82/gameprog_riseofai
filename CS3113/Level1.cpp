@@ -98,11 +98,11 @@ void Level1::initialise()
    /*
       ----------- CAMERA -----------
    */
-   // mGameState.camera = { 0 };                                    // zero initialize
-   // mGameState.camera.target = mGameState.zorp->getPosition();    // camera follows player
-   // mGameState.camera.offset = mOrigin;                           // camera offset to center of screen
-   // mGameState.camera.rotation = 0.0f;                            // no rotation
-   // mGameState.camera.zoom = 1.5f;                                // zoom more
+   mGameState.camera = { 0 };                                    // zero initialize
+   mGameState.camera.target = mGameState.zorp->getPosition();    // camera follows player
+   mGameState.camera.offset = mOrigin;                           // camera offset to center of screen
+   mGameState.camera.rotation = 0.0f;                            // no rotation
+   mGameState.camera.zoom = 1.5f;                                // zoom more
 }
 
 void Level1::update(float deltaTime)
@@ -129,8 +129,8 @@ void Level1::update(float deltaTime)
       Vector2 pos = mGameState.flyer->getPosition();
 
       // top and bottom limits
-      static float flyerTopY = pos.y - 200.0f;
-      static float flyerBottomY = pos.y + 200.0f;
+      static float flyerTopY = pos.y - 180.0f;
+      static float flyerBottomY = pos.y + 180.0f;
 
       static bool movingUp = true; // current direction
 
@@ -151,7 +151,7 @@ void Level1::update(float deltaTime)
    // TODO: FIX WIN AND LOSE CONDITION FOR THIS
    if (mGameState.zorp->getPosition().y > 800.0f) mGameState.nextSceneID = 1;
 
-   // panCamera(&mGameState.camera, &currentPlayerPosition);
+   panCamera(&mGameState.camera, &currentPlayerPosition);
 
    if (mGameState.zorp->getPosition().y > END_GAME_THRESHOLD){ // LOSE CONDITION
       mGameState.nextSceneID = 1; // CHANGE THIS TO THE LOSE SCREEN
