@@ -7,7 +7,7 @@ Level1::~Level1() { shutdown(); }
 
 void Level1::initialise()
 {
-   mGameState.nextSceneID = 1;
+   mGameState.nextSceneID = 0; // "don't switch scenes yet"-state
 
    // mGameState.bgm = LoadMusicStream("assets/the_search.mp3");
    // SetMusicVolume(mGameState.bgm, 0.33f);
@@ -98,11 +98,11 @@ void Level1::initialise()
    /*
       ----------- CAMERA -----------
    */
-   mGameState.camera = { 0 };                                    // zero initialize
-   mGameState.camera.target = mGameState.zorp->getPosition();    // camera follows player
-   mGameState.camera.offset = mOrigin;                           // camera offset to center of screen
-   mGameState.camera.rotation = 0.0f;                            // no rotation
-   mGameState.camera.zoom = 1.5f;                                // zoom more
+   // mGameState.camera = { 0 };                                    // zero initialize
+   // mGameState.camera.target = mGameState.zorp->getPosition();    // camera follows player
+   // mGameState.camera.offset = mOrigin;                           // camera offset to center of screen
+   // mGameState.camera.rotation = 0.0f;                            // no rotation
+   // mGameState.camera.zoom = 1.5f;                                // zoom more
 }
 
 void Level1::update(float deltaTime)
@@ -149,13 +149,13 @@ void Level1::update(float deltaTime)
    Vector2 currentPlayerPosition = { mGameState.zorp->getPosition().x, mOrigin.y };
 
    // TODO: FIX WIN AND LOSE CONDITION FOR THIS
-   if (mGameState.zorp->getPosition().y > 800.0f) mGameState.nextSceneID = 1;
+   // if (mGameState.zorp->getPosition().y > 800.0f) mGameState.nextSceneID = 1;
 
-   panCamera(&mGameState.camera, &currentPlayerPosition);
+   // // panCamera(&mGameState.camera, &currentPlayerPosition);
 
-   if (mGameState.zorp->getPosition().y > END_GAME_THRESHOLD){ // LOSE CONDITION
-      mGameState.nextSceneID = 1; // CHANGE THIS TO THE LOSE SCREEN
-   }
+   // if (mGameState.zorp->getPosition().y > END_GAME_THRESHOLD){ // LOSE CONDITION
+   //    mGameState.nextSceneID = 1; // CHANGE THIS TO THE LOSE SCREEN
+   // }
 
 }
 

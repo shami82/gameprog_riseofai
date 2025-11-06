@@ -55,7 +55,7 @@ void initialise()
     // gLevels.push_back(gLevel2);
     // gLevels.push_back(gLevel3);
 
-    switchToScene(gLevels[0]);
+    switchToScene(gLevels[1]);
 
     SetTargetFPS(FPS);
 }
@@ -64,7 +64,7 @@ void processInput()
 {
     if (IsKeyPressed(KEY_Q) || WindowShouldClose()) gAppStatus = TERMINATED;
     
-    if (gCurrentScene->getState().nextSceneID == 0) return; // for the start screen
+    // if (gCurrentScene->getState().nextSceneID == 0) return; // for the start screen
 
     gCurrentScene->getState().zorp->resetMovement();
 
@@ -109,16 +109,16 @@ void render()
     BeginDrawing();
 
     // only use camera when level, not startscreen
-    if (gCurrentScene->getState().camera.target.x != 0 || gCurrentScene->getState().camera.target.y != 0){
-        BeginMode2D(gCurrentScene->getState().camera);
-        gCurrentScene->render();
-        EndMode2D();
-    } 
-    else{
-        gCurrentScene->render();
-    }
+    // if (gCurrentScene->getState().camera.target.x != 0 || gCurrentScene->getState().camera.target.y != 0){
+    //     BeginMode2D(gCurrentScene->getState().camera);
+    //     gCurrentScene->render();
+    //     EndMode2D();
+    // } 
+    // else{
+    //     gCurrentScene->render();
+    // }
 
-    // gCurrentScene->render();
+    gCurrentScene->render();
 
     EndDrawing();
 }
