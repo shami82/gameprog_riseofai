@@ -11,8 +11,6 @@ struct GameState
     Entity *flyer;
     Map *map;
 
-    // std::vector<Entity*> enemies; // vector holding the dif enemies
-
     Music bgm;
     Sound jumpSound;
 
@@ -20,6 +18,13 @@ struct GameState
 
     int nextSceneID;
 };
+
+// struct GameAudio{ // for music and sfx
+//     Music bgm;
+//     Sound winSound;
+//     Sound loseSound;
+// };
+// GameAudio gState;
 
 class Scene 
 {
@@ -41,10 +46,6 @@ public:
     Vector2     getOrigin()          const { return mOrigin;    }
     const char* getBGColourHexCode() const { return mBGColourHexCode; }
 
-    // void clearEnemies(){
-    //     for (auto* e : mGameState.enemies) delete e;
-    //     mGameState.enemies.clear();
-    // }
 };
 
 #endif

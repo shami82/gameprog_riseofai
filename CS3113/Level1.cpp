@@ -9,7 +9,7 @@ void Level1::initialise()
 {
    mGameState.nextSceneID = 1;
 
-   // mGameState.bgm = LoadMusicStream("assets/game/04 - Silent Forest.wav");
+   // mGameState.bgm = LoadMusicStream("assets/the_search.mp3");
    // SetMusicVolume(mGameState.bgm, 0.33f);
    // PlayMusicStream(gState.bgm);
 
@@ -177,6 +177,6 @@ void Level1::shutdown()
    delete mGameState.zorp;
    delete mGameState.map;
 
-   // UnloadMusicStream(mGameState.bgm);
+   UnloadMusicStream(mGameState.bgm);
    // UnloadSound(mGameState.jumpSound);
 }

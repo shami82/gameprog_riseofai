@@ -22,6 +22,9 @@ Start *gStart = nullptr;
 Level1 *gLevel1 = nullptr;
 // Level2 *gLevel2 = nullptr;
 // Level3 *gLevel3 = nullptr;
+// Lose *gLose = nullptr;
+// End *gEnd = nullptr;
+
 
 // Function Declarations
 void switchToScene(Scene *scene);
@@ -59,7 +62,9 @@ void initialise()
 
 void processInput() 
 {
-    if (!(gCurrentScene->getState().zorp)) return;
+    if (IsKeyPressed(KEY_Q) || WindowShouldClose()) gAppStatus = TERMINATED;
+    
+    if (gCurrentScene->getState().nextSceneID == 0) return; // for the start screen
 
     gCurrentScene->getState().zorp->resetMovement();
 
@@ -76,7 +81,6 @@ void processInput()
     if (GetLength(gCurrentScene->getState().zorp->getMovement()) > 1.0f) 
         gCurrentScene->getState().zorp->normaliseMovement();
 
-    if (IsKeyPressed(KEY_Q) || WindowShouldClose()) gAppStatus = TERMINATED;
 }
 
 void update() 

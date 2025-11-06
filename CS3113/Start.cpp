@@ -9,6 +9,10 @@ void Start::initialise()
     textureBG = LoadTexture("assets/startscreen.PNG");
     mGameState.nextSceneID = 0;
 
+    // mGameState.bgm = LoadMusicStream("assets/the_search.mp3");
+    // SetMusicVolume(mGameState.bgm, 0.33f);
+    // PlayMusicStream(mGameState.bgm);
+
     mGameState.bg = new Entity(
         mOrigin,                                        // position
         { 990.0f, 720.0f },                             // size
@@ -42,4 +46,6 @@ void Start::render()
 void Start::shutdown()
 {
     delete mGameState.bg;
+
+    // UnloadMusicStream(mGameState.bgm);
 }
