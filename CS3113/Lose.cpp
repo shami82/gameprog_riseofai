@@ -1,12 +1,12 @@
-#include "Start.h"
+#include "Lose.h"
 
-Start::Start() : Scene({0.0f}, nullptr) {}
-Start::Start(Vector2 origin, const char *bgHexCode) : Scene(origin, bgHexCode) {}
-Start::~Start() { shutdown(); }
+Lose::Lose() : Scene({0.0f}, nullptr) {}
+Lose::Lose(Vector2 origin, const char *bgHexCode) : Scene(origin, bgHexCode) {}
+Lose::~Lose() { shutdown(); }
 
-void Start::initialise()
+void Lose::initialise()
 {
-    textureBG = LoadTexture("assets/startscreen.PNG");
+    textureBG = LoadTexture("assets/losescreen.PNG");
     mGameState.nextSceneID = 0;
 
     textureZorp = LoadTexture("assets/zorpsheet.PNG");
@@ -42,19 +42,19 @@ void Start::initialise()
     );
 }
 
-void Start::update(float deltaTime)
+void Lose::update(float deltaTime)
 {
-    if (IsKeyPressed(KEY_ENTER)){ mGameState.nextSceneID = 1; }
+    if (IsKeyPressed(KEY_ENTER)){ mGameState.nextSceneID = 0; }
 }
 
-void Start::render()
+void Lose::render()
 {
     ClearBackground(WHITE);
 
     mGameState.bg->render();
 
-    // instr to start
-    const char* msg = "Press [Enter] to Start";
+    // instr to restart
+    const char* msg = "Press [Enter] to Restart";
     int fontSize = 30;
     int textWidth = MeasureText(msg, fontSize);
     DrawText(msg,
@@ -64,7 +64,7 @@ void Start::render()
              WHITE);
 }
 
-void Start::shutdown()
+void Lose::shutdown()
 {
     delete mGameState.bg;
 

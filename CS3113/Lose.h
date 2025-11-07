@@ -1,18 +1,18 @@
-#include "Scene.h"
+#include "Start.h"
 
-#ifndef START_H
-#define START_H
+#ifndef LOSE_H
+#define LOSE_H
 
-class Start : public Scene {
+class Lose : public Scene {
 private:
     Texture2D textureBG;
     Texture2D textureZorp;
 
 public:
 
-    Start();
-    Start(Vector2 origin, const char *bgHexCode);
-    ~Start();
+    Lose();
+    Lose(Vector2 origin, const char *bgHexCode);
+    ~Lose();
     
     void initialise() override;
     void update(float deltaTime) override;

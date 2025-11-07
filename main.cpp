@@ -49,13 +49,17 @@ void initialise()
     gLevel1 = new Level1(ORIGIN, "#0D171f");
     // gLevel2 = new Level2(ORIGIN, "#0D171f");
     // gLevel3 = new Level3(ORIGIN, "#0D171f");
+    // gLose = new Lose(ORIGIN, "#0D171f");
+    // gEnd = new End(ORIGIN, "#0D171f");
 
     gLevels.push_back(gStart);
     gLevels.push_back(gLevel1);
     // gLevels.push_back(gLevel2);
     // gLevels.push_back(gLevel3);
+    // gLevels.push_back(gLose);
+    // gLevels.push_back(gEnd);
 
-    switchToScene(gLevels[1]);
+    switchToScene(gLevels[0]);
 
     SetTargetFPS(FPS);
 }
@@ -64,6 +68,7 @@ void processInput()
 {
     if (IsKeyPressed(KEY_Q) || WindowShouldClose()) gAppStatus = TERMINATED;
     
+    // dont need anymore 
     // if (gCurrentScene->getState().nextSceneID == 0) return; // for the start screen
 
     gCurrentScene->getState().zorp->resetMovement();
@@ -109,16 +114,16 @@ void render()
     BeginDrawing();
 
     // only use camera when level, not startscreen
-    // if (gCurrentScene->getState().camera.target.x != 0 || gCurrentScene->getState().camera.target.y != 0){
-    //     BeginMode2D(gCurrentScene->getState().camera);
-    //     gCurrentScene->render();
-    //     EndMode2D();
-    // } 
-    // else{
-    //     gCurrentScene->render();
-    // }
+    if (gCurrentScene->getState().camera.target.x != 0 || gCurrentScene->getState().camera.target.y != 0){
+        BeginMode2D(gCurrentScene->getState().camera);
+        gCurrentScene->render();
+        EndMode2D();
+    } 
+    else{
+        gCurrentScene->render();
+    }
 
-    gCurrentScene->render();
+    // gCurrentScene->render();
 
     EndDrawing();
 }
@@ -129,6 +134,8 @@ void shutdown()
     delete gLevel1;
     // delete gLevel2;
     // delete gLevel3;
+    // delete gLose;
+    // delete gEnd;
 
     for (int i = 0; i < NUMBER_OF_LEVELS; i++) gLevels[i] = nullptr;
 

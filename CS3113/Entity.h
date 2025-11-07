@@ -93,6 +93,8 @@ public:
 
     void update(float deltaTime, Entity *player, Map *map, 
         Entity *collidableEntities, int collisionCheckCount);
+    void update(float deltaTime, Entity *player, Map *map, 
+            const std::vector<Entity*> &collidableEntities);
     void render();
     void normaliseMovement() { Normalise(&mMovement); }
 

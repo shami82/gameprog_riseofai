@@ -308,6 +308,52 @@ void Entity::update(float deltaTime, Entity *player, Map *map,
         animate(deltaTime);
 }
 
+void Entity::update(float deltaTime, Entity *player, Map *map, 
+                    const std::vector<Entity*> &collidableEntities)
+{
+    if (mEntityStatus == INACTIVE) return;
+
+    if (mEntityType == NPC) AIActivate(player);
+
+    resetColliderFlags();
+
+    mVelocity.x = mMovement.x * mSpeed;
+
+    mVelocity.x += mAcceleration.x * deltaTime;
+    mVelocity.y += mAcceleration.y * deltaTime;
+
+    // ––––– JUMPING ––––– //
+    if (mIsJumping)
+    {
+        mIsJumping = false;
+        mVelocity.y -= mJumpingPower;
+    }
+
+    // Update position Y and check collisions
+    mPosition.y += mVelocity.y * deltaTime;
+
+    // Check collision with map
+    checkCollisionY(map);
+
+    // Check collision with all entities in vector
+    for (Entity* e : collidableEntities){
+        if (e && e->isActive())
+            checkCollisionY(e, 1);
+    }
+
+    // Update position X and check collisions
+    mPosition.x += mVelocity.x * deltaTime;
+    checkCollisionX(map);
+
+    for (Entity* e : collidableEntities){
+        if (e && e->isActive())
+            checkCollisionX(e, 1);
+    }
+
+    if (mTextureType == ATLAS && GetLength(mMovement) != 0 && mIsCollidingBottom)
+        animate(deltaTime);
+}
+
 void Entity::render()
 {
     if(mEntityStatus == INACTIVE) return;

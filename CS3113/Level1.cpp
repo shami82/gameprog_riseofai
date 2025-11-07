@@ -7,6 +7,9 @@ Level1::~Level1() { shutdown(); }
 
 void Level1::initialise()
 {
+   mGameState.fallingBlocks.clear();
+   mGameState.blockWillFall.clear();
+
    mGameState.nextSceneID = 0; // "don't switch scenes yet"-state
 
    // mGameState.bgm = LoadMusicStream("assets/the_search.mp3");
@@ -19,6 +22,7 @@ void Level1::initialise()
    textureFallingBlock = LoadTexture("assets/plan1fall.png");
    textureBG = LoadTexture("assets/spacebg.PNG");
    textureFlyer = LoadTexture("assets/flyer.PNG");
+   textureHeart = LoadTexture("assets/heart.PNG");
 
    /*
       ----------- BACKGROUND -----------
@@ -52,17 +56,10 @@ void Level1::initialise()
       {DOWN,  { 0,  1,  2,  3 }} // idle
    };
 
-   // Vector2 zorpPos = {
-   //    mOrigin.x + (2 * TILE_DIMENSION) + (TILE_DIMENSION / 2.0f),
-   //    mOrigin.y + (11 * TILE_DIMENSION) + (TILE_DIMENSION / 2.0f)
-   // };
-
    Vector2 zorpScale = { TILE_DIMENSION, TILE_DIMENSION * (17.0f / 16.0f) };
 
    mGameState.zorp = new Entity(
-      // {mOrigin.x - 300.0f, mOrigin.y - 300.0f}, // position
-      {TILE_DIMENSION * 3.0f, TILE_DIMENSION * 10.0f},
-      // {mOrigin.x + TILE_DIMENSION / 2.0f - 2 * TILE_DIMENSION, mOrigin.y + TILE_DIMENSION - 5 * TILE_DIMENSION},
+      {TILE_DIMENSION * 3.0f, TILE_DIMENSION * 10.0f}, // col, row
       zorpScale,                                // scale
       textureZorp,                              // texture file address
       ATLAS,                                    // single image or atlas?
@@ -71,10 +68,10 @@ void Level1::initialise()
       PLAYER                                    // entity type
    );
 
-   mGameState.zorp->setJumpingPower(550.0f);
+   mGameState.zorp->setJumpingPower(500.0f);
    mGameState.zorp->setColliderDimensions({
-      mGameState.zorp->getScale().x / 1.5f,
-      mGameState.zorp->getScale().y / 1.1f
+      mGameState.zorp->getScale().x * 0.75f,
+      mGameState.zorp->getScale().y
    });
    mGameState.zorp->setSpeed(200);
    mGameState.zorp->setAcceleration({0.0f, ACCELERATION_OF_GRAVITY});
@@ -90,19 +87,42 @@ void Level1::initialise()
       NPC                                    // entity type
    );
 
-   mGameState.flyer->setSpeed(100);
-   mGameState.flyer->setAIType(WANDERER);
+   mGameState.flyer->setSpeed(150);
    mGameState.flyer->setAcceleration({0.0f, 0.0f});
    mGameState.flyer->setDirection(UP);
 
    /*
+   ----------- FALLING BLOCKS -----------
+   */
+   for (int col = 6; col <= 9; col++){ // new entity per block
+      Vector2 blockpos = { TILE_DIMENSION * ((float)col + 0.75f), TILE_DIMENSION * 2.5f }; // row 3, cols 6–9
+
+      Entity* block = new Entity(
+         blockpos,                              // starting position
+         { TILE_DIMENSION, TILE_DIMENSION },    // scale
+         textureFallingBlock,                   // texture
+         BLOCK                                  //entity type
+      );
+
+      block->setAcceleration({0.0f, 0.0f}); // start stationary
+      block->setSpeed(0);
+      block->setColliderDimensions({
+         TILE_DIMENSION,
+         TILE_DIMENSION * 5.5f // detecting 4 blocks below
+      });
+
+      mGameState.fallingBlocks.push_back(block);
+      mGameState.blockWillFall.push_back(false);
+   }
+
+   /*
       ----------- CAMERA -----------
    */
-   // mGameState.camera = { 0 };                                    // zero initialize
-   // mGameState.camera.target = mGameState.zorp->getPosition();    // camera follows player
-   // mGameState.camera.offset = mOrigin;                           // camera offset to center of screen
-   // mGameState.camera.rotation = 0.0f;                            // no rotation
-   // mGameState.camera.zoom = 1.5f;                                // zoom more
+   mGameState.camera = { 0 };                                    // zero initialize
+   mGameState.camera.target = mGameState.zorp->getPosition();    // camera follows player
+   mGameState.camera.offset = {mOrigin.x, mOrigin.y + 100};      // camera offset to center of screen
+   mGameState.camera.rotation = 0.0f;                            // no rotation
+   mGameState.camera.zoom = 1.25f;                               // zoom more
 }
 
 void Level1::update(float deltaTime)
@@ -120,19 +140,20 @@ void Level1::update(float deltaTime)
    mGameState.flyer->update(
       deltaTime,      // delta time / fixed timestep
       nullptr,        // player
-      nullptr,        // map
-      nullptr,        // collidable entities
+      mGameState.map,        // map
+      nullptr, // collidable entities
       0               // col. entity count
    );
 
-   if (mGameState.flyer){
-      Vector2 pos = mGameState.flyer->getPosition();
+   if (mGameState.flyer){ // FLYER MOVEMENTS
+      static float startY = mGameState.flyer->getPosition().y;
 
       // top and bottom limits
-      static float flyerTopY = pos.y - 180.0f;
-      static float flyerBottomY = pos.y + 180.0f;
+      static float flyerTopY = startY - 180.0f;
+      static float flyerBottomY = startY + 180.0f;
 
       static bool movingUp = true; // current direction
+      Vector2 pos = mGameState.flyer->getPosition();
 
       if (movingUp){
          pos.y -= mGameState.flyer->getSpeed() * deltaTime;
@@ -146,36 +167,133 @@ void Level1::update(float deltaTime)
       mGameState.flyer->setPosition(pos);
    }
 
+   for (size_t i = 0; i < mGameState.fallingBlocks.size(); i++){ // falling blocks movement
+      Entity* block = mGameState.fallingBlocks[i];
+      if (!block->isActive()) continue; // skip inactive blocks
+
+      // falls if player is within 4 tiles under it
+      if (!mGameState.blockWillFall[i] && block->isColliding(mGameState.zorp)){
+         mGameState.blockWillFall[i] = true;
+
+         // reset collider to normal block size for second time collisions
+         block->setColliderDimensions({ TILE_DIMENSION, TILE_DIMENSION });
+
+         // update to let it fall now
+         block->setAcceleration({ 0.0f, ACCELERATION_OF_GRAVITY - 350.0f });
+      }
+
+      block->update(deltaTime, nullptr, mGameState.map, nullptr, 0);
+
+      if (block->isCollidingBottom()){ // deactivate the block once its hit the bottom (platform)
+         block->setAcceleration({0.0f, 0.0f});
+         block->setVelocity({0.0f, 0.0f});
+      }
+   }
+
+   std::vector<Entity*> activeBlocks;
+   for (Entity* block : mGameState.fallingBlocks){
+      if (block && block->isActive()) activeBlocks.push_back(block);
+   }
+   mGameState.zorp->update(deltaTime, nullptr, mGameState.map, activeBlocks);
+
+   // collide with player on -> lose
+   for (Entity* block : activeBlocks) {
+      if (block->isColliding(mGameState.zorp)){
+         if (block->getVelocity().y > 0 && mGameState.zorp->isCollidingTop()){
+            if (lives > 0){ // lose a life restart level
+               lives--;
+               initialise();
+               return;
+            } 
+            else{
+               mGameState.nextSceneID = 1; // TODO: UPDATE LOSE SCREEN
+               return;
+            }
+         }
+      }
+   }
+
    Vector2 currentPlayerPosition = { mGameState.zorp->getPosition().x, mOrigin.y };
 
    // TODO: FIX WIN AND LOSE CONDITION FOR THIS
-   // if (mGameState.zorp->getPosition().y > 800.0f) mGameState.nextSceneID = 1;
+   if (mGameState.zorp->getPosition().y > END_GAME_THRESHOLD){ // falling off screen
+      if (lives > 0){ // lose a life restart level
+         lives--;
+         initialise();
+         return;
+      } 
+      else{
+         mGameState.nextSceneID = 1; // TODO: UPDATE TO LOSE SCREEN
+         return;
+      }
+   }
 
-   // // panCamera(&mGameState.camera, &currentPlayerPosition);
-
-   // if (mGameState.zorp->getPosition().y > END_GAME_THRESHOLD){ // LOSE CONDITION
-   //    mGameState.nextSceneID = 1; // CHANGE THIS TO THE LOSE SCREEN
-   // }
+   // for panning the camera to follow zorp
+   Vector2 zorpPos = mGameState.zorp->getPosition();
+   mGameState.camera.target = zorpPos;
 
 }
 
 void Level1::render()
 {
    ClearBackground(ColorFromHex(mBGColourHexCode));
+   BeginMode2D(mGameState.camera);
 
    mGameState.bg->render();
+   mGameState.map->render();
    mGameState.zorp->render();
    mGameState.zorp->displayCollider();
    mGameState.flyer->render();
-   mGameState.map->render();
+   for (Entity* block : mGameState.fallingBlocks){
+      if (block && block->isActive()){
+         block->render();
+         block->displayCollider();
+      }
+   }
+   EndMode2D();
+
+   // rendering the hearts for lives
+   const float padding = 20.0f;
+   for (int i = 0; i < lives; i++){
+      Rectangle textureArea = { 
+         0, 0, 
+         (float)textureHeart.width, (float)textureHeart.height 
+      };
+      Rectangle destinationArea = {
+         padding + i * (TILE_DIMENSION + padding),
+         padding,
+         TILE_DIMENSION,
+         TILE_DIMENSION
+      };
+      Vector2 origin = { 0.0f, 0.0f }; // to be top left
+
+      DrawTexturePro(
+         textureHeart,
+         textureArea,
+         destinationArea,
+         origin,
+         0.0f,
+         WHITE
+      );
+   }
 
 }
 
 void Level1::shutdown()
 {
    delete mGameState.bg;
-   delete mGameState.zorp;
    delete mGameState.map;
+   delete mGameState.zorp;
+   delete mGameState.flyer;
+
+   for (Entity* block : mGameState.fallingBlocks){
+      delete block;
+   }
+   mGameState.fallingBlocks.clear();
+   mGameState.blockWillFall.clear();
+
+   UnloadTexture(textureHeart);
+
 
    UnloadMusicStream(mGameState.bgm);
    // UnloadSound(mGameState.jumpSound);

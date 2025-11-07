@@ -10,6 +10,8 @@ struct GameState
     Entity *bg;
     Entity *flyer;
     Map *map;
+    std::vector<Entity*> fallingBlocks = {};
+    std::vector<bool> blockWillFall = {};
 
     Music bgm;
     Sound jumpSound;
@@ -32,6 +34,7 @@ protected: // similar to private but children and friend classes can use them
     GameState mGameState;
     Vector2 mOrigin;
     const char *mBGColourHexCode = "#000000";
+    int lives = 3;
     
 public:
     Scene();
