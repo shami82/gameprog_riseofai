@@ -60,6 +60,7 @@ private:
     Texture2D textureFallingBlock;
     Texture2D textureBG;
     Texture2D textureFlyer;
+    Texture2D textureWanderer;
     Texture2D textureHeart;
 
 public:

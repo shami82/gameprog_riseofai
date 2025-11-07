@@ -9,6 +9,7 @@ struct GameState
     Entity *zorp;
     Entity *bg;
     Entity *flyer;
+    Entity *wanderer;
     Map *map;
     std::vector<Entity*> fallingBlocks = {};
     std::vector<bool> blockWillFall = {};
