@@ -79,6 +79,7 @@ void Level1::initialise()
    });
    mGameState.zorp->setSpeed(200);
    mGameState.zorp->setAcceleration({0.0f, ACCELERATION_OF_GRAVITY});
+   mGameState.zorp->setDirection(UP);
 
    /*
       ----------- FLYER -----------
@@ -196,8 +197,8 @@ void Level1::update(float deltaTime)
 
    // flyer collide with player on -> lose
    if (mGameState.flyer->isColliding(mGameState.zorp)){
-      if (lives > 1){ // lose a life restart level
-         lives--;
+      if (mGameState.lives > 1){ // lose a life restart level
+         mGameState.lives--;
          initialise();
          return;
       } 
@@ -230,8 +231,8 @@ void Level1::update(float deltaTime)
 
    // wanderer collide with player on -> lose
    if (mGameState.wanderer->isColliding(mGameState.zorp)){
-      if (lives > 1){ // lose a life restart level
-         lives--;
+      if (mGameState.lives > 1){ // lose a life restart level
+         mGameState.lives--;
          initialise();
          return;
       } 
@@ -273,8 +274,8 @@ void Level1::update(float deltaTime)
    // block collide with player on -> lose
    for (Entity* block : activeBlocks){
       if (block->isColliding(mGameState.zorp) && block->getVelocity().y > 0){
-         if (lives > 1){ // lose a life restart level
-            lives--;
+         if (mGameState.lives > 1){ // lose a life restart level
+            mGameState.lives--;
             initialise();
             return;
          } 
@@ -289,8 +290,8 @@ void Level1::update(float deltaTime)
 
    // TODO: FIX WIN AND LOSE CONDITION FOR THIS
    if (mGameState.zorp->getPosition().y > END_GAME_THRESHOLD){ // falling off screen
-      if (lives > 1){ // lose a life restart level
-         lives--;
+      if (mGameState.lives > 1){ // lose a life restart level
+         mGameState.lives--;
          initialise();
          return;
       } 
@@ -365,7 +366,7 @@ void Level1::render()
 
    // rendering the hearts for lives
    const float padding = 20.0f;
-   for (int i = 0; i < lives; i++){
+   for (int i = 0; i < mGameState.lives; i++){
       Rectangle textureArea = { 
          0, 0, 
          (float)textureHeart.width, (float)textureHeart.height 

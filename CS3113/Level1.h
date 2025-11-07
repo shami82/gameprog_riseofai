@@ -3,12 +3,15 @@
 #ifndef LEVEL1_H
 #define LEVEL1_H
 
-constexpr int LEVEL_WIDTH = 14,
-            //   LEVEL_HEIGHT = 14;
-              LEVEL_HEIGHT = 12;
+// constexpr int LEVEL_WIDTH = 14,
+//             //   LEVEL_HEIGHT = 14;
+//               LEVEL_HEIGHT = 12;
 
 class Level1 : public Scene {
 private:
+    static constexpr int LEVEL_WIDTH = 14,
+                         LEVEL_HEIGHT = 12;
+
     unsigned int mLevelData[LEVEL_WIDTH * LEVEL_HEIGHT] = {
         1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0,
