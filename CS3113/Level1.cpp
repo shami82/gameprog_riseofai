@@ -70,7 +70,7 @@ void Level1::initialise()
 
    mGameState.zorp->setJumpingPower(500.0f);
    mGameState.zorp->setColliderDimensions({
-      mGameState.zorp->getScale().x * 0.75f,
+      mGameState.zorp->getScale().x * 0.7f,
       mGameState.zorp->getScale().y
    });
    mGameState.zorp->setSpeed(200);
@@ -129,14 +129,16 @@ void Level1::update(float deltaTime)
 {
    // UpdateMusicStream(mGameState.bgm);
 
-   mGameState.zorp->update(
-      deltaTime,      // delta time / fixed timestep
-      nullptr,        // player
-      mGameState.map, // map
-      nullptr,        // collidable entities
-      0               // col. entity count
-   );
+   // mGameState.zorp->update(
+   //    deltaTime,      // delta time / fixed timestep
+   //    nullptr,        // player
+   //    mGameState.map, // map
+   //    nullptr,        // collidable entities
+   //    0               // col. entity count
+   // );
 
+   mGameState.flyer->setMovement({0.0f, 0.0f});
+   mGameState.flyer->setVelocity({0.0f, mGameState.flyer->getVelocity().y});
    mGameState.flyer->update(
       deltaTime,      // delta time / fixed timestep
       nullptr,        // player
@@ -179,7 +181,7 @@ void Level1::update(float deltaTime)
          block->setColliderDimensions({ TILE_DIMENSION, TILE_DIMENSION });
 
          // update to let it fall now
-         block->setAcceleration({ 0.0f, ACCELERATION_OF_GRAVITY - 350.0f });
+         block->setAcceleration({ 0.0f, ACCELERATION_OF_GRAVITY - 450.0f });
       }
 
       block->update(deltaTime, nullptr, mGameState.map, nullptr, 0);
@@ -197,9 +199,9 @@ void Level1::update(float deltaTime)
    mGameState.zorp->update(deltaTime, nullptr, mGameState.map, activeBlocks);
 
    // collide with player on -> lose
-   for (Entity* block : activeBlocks) {
+   for (Entity* block : activeBlocks) { // TODO: STILL BUGGY DOES NOT REMOVE LIFE
       if (block->isColliding(mGameState.zorp)){
-         if (block->getVelocity().y > 0 && mGameState.zorp->isCollidingTop()){
+         if (block->getVelocity().y > 0){
             if (lives > 0){ // lose a life restart level
                lives--;
                initialise();
