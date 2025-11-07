@@ -62,6 +62,13 @@ private:
     Texture2D textureFlyer;
     Texture2D textureWanderer;
     Texture2D textureHeart;
+    Texture2D textureRocketStation;
+    Texture2D textureRocketMov1;
+    Texture2D textureRocketMov2;
+
+    bool rocketReached;
+    float rocketMovTimer;
+    int rocketCurrent;
 
 public:
     static constexpr float TILE_DIMENSION       = 60.0f,

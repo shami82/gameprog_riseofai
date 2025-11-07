@@ -10,6 +10,7 @@ struct GameState
     Entity *bg;
     Entity *flyer;
     Entity *wanderer;
+    Entity *rocket;
     Map *map;
     std::vector<Entity*> fallingBlocks = {};
     std::vector<bool> blockWillFall = {};

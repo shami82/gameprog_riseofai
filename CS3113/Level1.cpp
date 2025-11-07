@@ -24,6 +24,9 @@ void Level1::initialise()
    textureFlyer = LoadTexture("assets/flyer.PNG");
    textureWanderer = LoadTexture("assets/wanderer.PNG");
    textureHeart = LoadTexture("assets/heart.PNG");
+   textureRocketStation = LoadTexture("assets/rocketstation.PNG");
+   textureRocketMov1 = LoadTexture("assets/rocketmov1.PNG");
+   textureRocketMov2 = LoadTexture("assets/rocketmov2.PNG");
 
    /*
       ----------- BACKGROUND -----------
@@ -105,7 +108,7 @@ void Level1::initialise()
 
    mGameState.wanderer->setSpeed(80);
    mGameState.wanderer->setAcceleration({0.0f, ACCELERATION_OF_GRAVITY});
-   mGameState.wanderer->setDirection(LEFT);
+   mGameState.wanderer->setDirection(RIGHT);
 
    /*
    ----------- FALLING BLOCKS -----------
@@ -130,6 +133,22 @@ void Level1::initialise()
       mGameState.fallingBlocks.push_back(block);
       mGameState.blockWillFall.push_back(false);
    }
+
+   /*
+      ----------- ROCKET (THE GOAL) -----------
+   */
+
+   mGameState.rocket = new Entity(
+      {TILE_DIMENSION * 13.75f, TILE_DIMENSION * 1.75f}, // starting position
+      { TILE_DIMENSION * (28.0f/16.0f), TILE_DIMENSION * (32.0f/16.0f)},    // scale
+      textureRocketStation,                          // texture
+      NONE                                    // entity type
+   );
+
+   // init for animating later
+   rocketReached = false;
+   rocketMovTimer = 0.0f;
+   rocketCurrent = 0;
 
    /*
       ----------- CAMERA -----------
@@ -281,6 +300,40 @@ void Level1::update(float deltaTime)
       }
    }
 
+   // reaching the rocket to win
+   if (!rocketReached && mGameState.zorp->isColliding(mGameState.rocket)){
+      rocketReached = true; // trigger animation
+      mGameState.zorp->deactivate(); // hide player
+   }
+
+   if (rocketReached){// animate rocket moving up and switching
+      Vector2 pos = mGameState.rocket->getPosition();
+      pos.y -= 100.0f * deltaTime; // rocket speed
+      mGameState.rocket->setPosition(pos);
+
+      rocketMovTimer += deltaTime;
+      if (rocketMovTimer >= 0.25f){
+         rocketMovTimer = 0.0f;
+         rocketCurrent = 1 - rocketCurrent;
+      }
+
+      // set texture based on the frame its in
+      float heightFix = 0.0f;
+      if (rocketCurrent == 0){
+         mGameState.rocket->setScale({ TILE_DIMENSION * (28.0f/16.0f), TILE_DIMENSION * (39.0f/16.0f)});
+         mGameState.rocket->setTexture(textureRocketMov1);
+      }
+      else{
+         mGameState.rocket->setScale({ TILE_DIMENSION * (28.0f/16.0f), TILE_DIMENSION * (39.0f/16.0f)});
+         mGameState.rocket->setTexture(textureRocketMov2);
+      }
+
+      // next lvl when out of frame
+      if (pos.y + mGameState.rocket->getScale().y < -50.0f){
+         mGameState.nextSceneID = 1; // TODO: UPDATE WIN SCREEN
+      }
+   }
+
    // for panning the camera to follow zorp
    Vector2 zorpPos = mGameState.zorp->getPosition();
    mGameState.camera.target = zorpPos;
@@ -300,6 +353,8 @@ void Level1::render()
    mGameState.flyer->displayCollider();
    mGameState.wanderer->render();
    mGameState.wanderer->displayCollider();
+   mGameState.rocket->render();
+   mGameState.rocket->displayCollider();
    for (Entity* block : mGameState.fallingBlocks){
       if (block && block->isActive()){
          block->render();
@@ -342,6 +397,7 @@ void Level1::shutdown()
    delete mGameState.zorp;
    delete mGameState.flyer;
    delete mGameState.wanderer;
+   delete mGameState.rocket;
 
    for (Entity* block : mGameState.fallingBlocks){
       delete block;
@@ -350,7 +406,9 @@ void Level1::shutdown()
    mGameState.blockWillFall.clear();
 
    UnloadTexture(textureHeart);
-
+   UnloadTexture(textureRocketStation);
+   UnloadTexture(textureRocketMov1);
+   UnloadTexture(textureRocketMov2);
 
    UnloadMusicStream(mGameState.bgm);
    // UnloadSound(mGameState.jumpSound);

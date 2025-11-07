@@ -152,6 +152,8 @@ public:
         { mScale = newScale;                       }
     void setTexture(const char *textureFilepath)
         { mTexture = LoadTexture(textureFilepath); }
+    void setTexture(Texture2D newTexture)
+        { mTexture = newTexture; }
     void setColliderDimensions(Vector2 newDimensions) 
         { mColliderDimensions = newDimensions;     }
     void setSpriteSheetDimensions(Vector2 newDimensions) 
