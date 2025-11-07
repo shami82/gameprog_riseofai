@@ -14,7 +14,7 @@ void Level1::initialise()
 
    // mGameState.bgm = LoadMusicStream("assets/the_search.mp3");
    // SetMusicVolume(mGameState.bgm, 0.33f);
-   // PlayMusicStream(gState.bgm);
+   // PlayMusicStream(mGameState.bgm);
 
    // mGameState.jumpSound = LoadSound("assets/game/Dirt Jump.wav");
 
@@ -77,7 +77,7 @@ void Level1::initialise()
       mGameState.zorp->getScale().x * 0.7f,
       mGameState.zorp->getScale().y
    });
-   mGameState.zorp->setSpeed(200);
+   mGameState.zorp->setSpeed(165);
    mGameState.zorp->setAcceleration({0.0f, ACCELERATION_OF_GRAVITY});
    mGameState.zorp->setDirection(UP);
 
@@ -86,7 +86,7 @@ void Level1::initialise()
    */
 
    mGameState.flyer = new Entity(
-      {TILE_DIMENSION * 11.5f, TILE_DIMENSION * 1.0f}, // starting position
+      {TILE_DIMENSION * 11.75f, TILE_DIMENSION * 1.0f}, // starting position
       { TILE_DIMENSION, TILE_DIMENSION },    // scale
       textureFlyer,                          // texture
       NONE                                    // entity type
@@ -305,6 +305,7 @@ void Level1::update(float deltaTime)
    if (!rocketReached && mGameState.zorp->isColliding(mGameState.rocket)){
       rocketReached = true; // trigger animation
       mGameState.zorp->deactivate(); // hide player
+      mGameState.zorp->setColliderDimensions({0.0f,0.0f});
    }
 
    if (rocketReached){// animate rocket moving up and switching
@@ -331,7 +332,7 @@ void Level1::update(float deltaTime)
 
       // next lvl when out of frame
       if (pos.y + mGameState.rocket->getScale().y < -50.0f){
-         mGameState.nextSceneID = 1; // TODO: UPDATE WIN SCREEN
+         mGameState.nextSceneID = 3; // TODO: UPDATE WIN SCREEN
       }
    }
 

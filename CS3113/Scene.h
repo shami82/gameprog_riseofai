@@ -9,6 +9,7 @@ struct GameState
     Entity *zorp;
     Entity *bg;
     Entity *flyer;
+    Entity *flyer2;
     Entity *wanderer;
     Entity *rocket;
     Map *map;
