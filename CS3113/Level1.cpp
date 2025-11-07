@@ -202,7 +202,7 @@ void Level1::update(float deltaTime)
          return;
       } 
       else{
-         mGameState.nextSceneID = 2; // TODO: UPDATE TO LOSE SCREEN
+         mGameState.nextSceneID = 1; // TODO: UPDATE TO LOSE SCREEN
          return;
       }
    }
@@ -236,7 +236,7 @@ void Level1::update(float deltaTime)
          return;
       } 
       else{
-         mGameState.nextSceneID = 2; // TODO: UPDATE TO LOSE SCREEN
+         mGameState.nextSceneID = 1; // TODO: UPDATE TO LOSE SCREEN
          return;
       }
    }
@@ -279,7 +279,7 @@ void Level1::update(float deltaTime)
             return;
          } 
          else{
-            mGameState.nextSceneID = 2; // TODO: UPDATE LOSE SCREEN
+            mGameState.nextSceneID = 1; // TODO: UPDATE LOSE SCREEN
             return;
          }
       }
@@ -295,7 +295,7 @@ void Level1::update(float deltaTime)
          return;
       } 
       else{
-         mGameState.nextSceneID = 2; // TODO: UPDATE TO LOSE SCREEN
+         mGameState.nextSceneID = 1; // TODO: UPDATE TO LOSE SCREEN
          return;
       }
    }

@@ -44,7 +44,8 @@ void Lose::initialise()
 
 void Lose::update(float deltaTime)
 {
-    if (IsKeyPressed(KEY_ENTER)){ mGameState.nextSceneID = 1; } // restart at level 1
+    lives = 3; // make the lives go back to 3 instead of 1/0
+    if (IsKeyPressed(KEY_ENTER)){ mGameState.nextSceneID = 2; } // restart at level 1
 }
 
 void Lose::render()

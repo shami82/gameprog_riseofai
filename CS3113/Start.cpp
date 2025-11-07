@@ -44,7 +44,7 @@ void Start::initialise()
 
 void Start::update(float deltaTime)
 {
-    if (IsKeyPressed(KEY_ENTER)){ mGameState.nextSceneID = 1; }
+    if (IsKeyPressed(KEY_ENTER)){ mGameState.nextSceneID = 2; } // go to lvl 1
 }
 
 void Start::render()
