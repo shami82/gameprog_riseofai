@@ -1,4 +1,4 @@
-#include "CS3113/Level1.h"
+#include "CS3113/Lose.h"
 
 // Global Constants
 constexpr int SCREEN_WIDTH     = 990,
@@ -22,7 +22,7 @@ Start *gStart = nullptr;
 Level1 *gLevel1 = nullptr;
 // Level2 *gLevel2 = nullptr;
 // Level3 *gLevel3 = nullptr;
-// Lose *gLose = nullptr;
+Lose *gLose = nullptr;
 // End *gEnd = nullptr;
 
 
@@ -49,14 +49,14 @@ void initialise()
     gLevel1 = new Level1(ORIGIN, "#0D171f");
     // gLevel2 = new Level2(ORIGIN, "#0D171f");
     // gLevel3 = new Level3(ORIGIN, "#0D171f");
-    // gLose = new Lose(ORIGIN, "#0D171f");
+    gLose = new Lose(ORIGIN, "#0D171f");
     // gEnd = new End(ORIGIN, "#0D171f");
 
     gLevels.push_back(gStart);
     gLevels.push_back(gLevel1);
     // gLevels.push_back(gLevel2);
     // gLevels.push_back(gLevel3);
-    // gLevels.push_back(gLose);
+    gLevels.push_back(gLose);
     // gLevels.push_back(gEnd);
 
     switchToScene(gLevels[0]);
@@ -134,7 +134,7 @@ void shutdown()
     delete gLevel1;
     // delete gLevel2;
     // delete gLevel3;
-    // delete gLose;
+    delete gLose;
     // delete gEnd;
 
     for (int i = 0; i < NUMBER_OF_LEVELS; i++) gLevels[i] = nullptr;

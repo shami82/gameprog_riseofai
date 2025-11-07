@@ -196,13 +196,13 @@ void Level1::update(float deltaTime)
 
    // flyer collide with player on -> lose
    if (mGameState.flyer->isColliding(mGameState.zorp)){
-      if (lives > 0){ // lose a life restart level
+      if (lives > 1){ // lose a life restart level
          lives--;
          initialise();
          return;
       } 
       else{
-         mGameState.nextSceneID = 1; // TODO: UPDATE TO LOSE SCREEN
+         mGameState.nextSceneID = 2; // TODO: UPDATE TO LOSE SCREEN
          return;
       }
    }
@@ -230,13 +230,13 @@ void Level1::update(float deltaTime)
 
    // wanderer collide with player on -> lose
    if (mGameState.wanderer->isColliding(mGameState.zorp)){
-      if (lives > 0){ // lose a life restart level
+      if (lives > 1){ // lose a life restart level
          lives--;
          initialise();
          return;
       } 
       else{
-         mGameState.nextSceneID = 1; // TODO: UPDATE TO LOSE SCREEN
+         mGameState.nextSceneID = 2; // TODO: UPDATE TO LOSE SCREEN
          return;
       }
    }
@@ -273,13 +273,13 @@ void Level1::update(float deltaTime)
    // block collide with player on -> lose
    for (Entity* block : activeBlocks){
       if (block->isColliding(mGameState.zorp) && block->getVelocity().y > 0){
-         if (lives > 0){ // lose a life restart level
+         if (lives > 1){ // lose a life restart level
             lives--;
             initialise();
             return;
          } 
          else{
-            mGameState.nextSceneID = 1; // TODO: UPDATE LOSE SCREEN
+            mGameState.nextSceneID = 2; // TODO: UPDATE LOSE SCREEN
             return;
          }
       }
@@ -289,13 +289,13 @@ void Level1::update(float deltaTime)
 
    // TODO: FIX WIN AND LOSE CONDITION FOR THIS
    if (mGameState.zorp->getPosition().y > END_GAME_THRESHOLD){ // falling off screen
-      if (lives > 0){ // lose a life restart level
+      if (lives > 1){ // lose a life restart level
          lives--;
          initialise();
          return;
       } 
       else{
-         mGameState.nextSceneID = 1; // TODO: UPDATE TO LOSE SCREEN
+         mGameState.nextSceneID = 2; // TODO: UPDATE TO LOSE SCREEN
          return;
       }
    }
