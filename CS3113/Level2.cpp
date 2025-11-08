@@ -151,6 +151,10 @@ void Level2::initialise()
 
 void Level2::update(float deltaTime)
 {
+    if (IsKeyPressed(KEY_N)){ // for skipping level
+        mGameState.nextSceneID = 4;
+        return;
+    }
     UpdateMusicStream(mGameState.bgm);
     mGameState.zorp->update(
         deltaTime,      // delta time / fixed timestep
