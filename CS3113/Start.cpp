@@ -12,23 +12,23 @@ void Start::initialise()
     textureZorp = LoadTexture("assets/zorpsheet.PNG");
     /*
       ----------- ZORP :D -----------
-   */
-   std::map<Direction, std::vector<int>> zorpAnimationAtlas = {
-      {UP,    { 0,  1,  2,  3 }}, // idle
-      {RIGHT, { 4,  5,  6,  7 }},
-      {LEFT,  { 8,  9, 10, 11 }},
-      {DOWN,  { 0,  1,  2,  3 }} // idle
-   };
+    */
+    std::map<Direction, std::vector<int>> zorpAnimationAtlas = {
+        {UP,    { 0,  1,  2,  3 }}, // idle
+        {RIGHT, { 4,  5,  6,  7 }},
+        {LEFT,  { 8,  9, 10, 11 }},
+        {DOWN,  { 0,  1,  2,  3 }} // idle
+    };
 
-   mGameState.zorp = new Entity( // dummy info for initialization
-      {0,0},
-      {0,0},                                // scale
-      textureZorp,                              // texture file address
-      ATLAS,                                    // single image or atlas?
-      { 3, 4 },                                 // atlas dimensions
-      zorpAnimationAtlas,                       // actual atlas
-      PLAYER                                    // entity type
-   );
+    mGameState.zorp = new Entity( // dummy info for initialization
+        {0,0},
+        {0,0},                                // scale
+        textureZorp,                              // texture file address
+        ATLAS,                                    // single image or atlas?
+        { 3, 4 },                                 // atlas dimensions
+        zorpAnimationAtlas,                       // actual atlas
+        PLAYER                                    // entity type
+    );
 
     mGameState.bgm = LoadMusicStream("assets/void.mp3");
     SetMusicVolume(mGameState.bgm, 0.50f);
