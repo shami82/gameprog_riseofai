@@ -60,7 +60,7 @@ void initialise()
     gLevels.push_back(gLevel3);
     gLevels.push_back(gEnd);
 
-    switchToScene(gLevels[0]); // SWITCH AROUND TO FOCUS ON LEVELS (SHOULD BE gLevels[0w])
+    switchToScene(gLevels[0]); // SWITCH AROUND TO FOCUS ON LEVELS (SHOULD BE gLevels[0])
 
     SetTargetFPS(FPS);
 }
@@ -82,7 +82,9 @@ void processInput()
     if (GetLength(gCurrentScene->getState().zorp->getMovement()) > 1.0f) 
         gCurrentScene->getState().zorp->normaliseMovement();
 
-    if (IsKeyPressed(KEY_Q) || WindowShouldClose()) gAppStatus = TERMINATED;
+    if (IsKeyPressed(KEY_Q) || WindowShouldClose()){
+        gAppStatus = TERMINATED;
+    }
 
 }
 

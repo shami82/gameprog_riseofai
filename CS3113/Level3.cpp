@@ -234,7 +234,7 @@ void Level3::update(float deltaTime)
 
    if (rocketReached){// animate rocket moving up and switching
       Vector2 pos = mGameState.rocket->getPosition();
-      pos.y -= 100.0f * deltaTime; // rocket speed
+      pos.y -= 150.0f * deltaTime; // rocket speed
       mGameState.rocket->setPosition(pos);
 
       rocketMovTimer += deltaTime;

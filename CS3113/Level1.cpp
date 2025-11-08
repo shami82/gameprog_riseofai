@@ -142,7 +142,7 @@ void Level1::initialise()
    */
 
    mGameState.rocket = new Entity(
-      {TILE_DIMENSION * 13.75f, TILE_DIMENSION * 1.75f}, // starting position
+      {TILE_DIMENSION * 13.75f, TILE_DIMENSION * 2.0f}, // starting position
       { TILE_DIMENSION * (28.0f/16.0f), TILE_DIMENSION * (32.0f/16.0f)},    // scale
       textureRocketStation,                          // texture
       NONE                                    // entity type
@@ -317,7 +317,7 @@ void Level1::update(float deltaTime)
 
    if (rocketReached){// animate rocket moving up and switching
       Vector2 pos = mGameState.rocket->getPosition();
-      pos.y -= 100.0f * deltaTime; // rocket speed
+      pos.y -= 150.0f * deltaTime; // rocket speed
       mGameState.rocket->setPosition(pos);
 
       rocketMovTimer += deltaTime;
@@ -338,7 +338,7 @@ void Level1::update(float deltaTime)
       }
 
       // next lvl when out of frame
-      if (pos.y + mGameState.rocket->getScale().y < -50.0f){
+      if (pos.y + mGameState.rocket->getScale().y < -300.0f){
          mGameState.nextSceneID = 3; // TODO: UPDATE WIN SCREEN
       }
    }
