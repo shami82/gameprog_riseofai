@@ -66,8 +66,6 @@ void initialise()
 
 void processInput() 
 {
-    if (IsKeyPressed(KEY_Q) || WindowShouldClose()) gAppStatus = TERMINATED;
-
     gCurrentScene->getState().zorp->resetMovement();
 
     if      (IsKeyDown(KEY_A)) gCurrentScene->getState().zorp->moveLeft();
@@ -82,6 +80,8 @@ void processInput()
 
     if (GetLength(gCurrentScene->getState().zorp->getMovement()) > 1.0f) 
         gCurrentScene->getState().zorp->normaliseMovement();
+
+    if (IsKeyPressed(KEY_Q) || WindowShouldClose()) gAppStatus = TERMINATED;
 
 }
 
