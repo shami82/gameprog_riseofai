@@ -15,7 +15,7 @@ private:
         1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
         1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, // falling platform col 11, 8,9
         1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, // this will have 2-4 flyers that go up and down col 4&10
+        1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, // this will have 1 flyer that go up and down col 10 (row 12 center)
         1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1,
         1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1,
         1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1,
@@ -30,6 +30,7 @@ private:
     Texture2D textureZorp;
     Texture2D textureFallingBlock;
     Texture2D textureBG;
+    Texture2D textureFlyer;
     Texture2D textureHeart;
     Texture2D textureRocketStation;
     Texture2D textureRocketMov1;

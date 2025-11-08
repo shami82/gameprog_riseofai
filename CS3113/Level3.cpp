@@ -24,6 +24,7 @@ void Level3::initialise()
     textureZorp = LoadTexture("assets/zorpsheet.PNG");
     textureFallingBlock = LoadTexture("assets/plan3fall.png");
     textureBG = LoadTexture("assets/spacebg.PNG");
+    textureFlyer = LoadTexture("assets/flyer.PNG");
     textureHeart = LoadTexture("assets/heart.PNG");
     textureRocketStation = LoadTexture("assets/rocketstation.PNG");
     textureRocketMov1 = LoadTexture("assets/rocketmov1.PNG");
@@ -81,6 +82,21 @@ void Level3::initialise()
     mGameState.zorp->setSpeed(165);
     mGameState.zorp->setAcceleration({0.0f, ACCELERATION_OF_GRAVITY});
     mGameState.zorp->setDirection(UP);
+
+    /*
+        ----------- FLYER -----------
+    */
+
+    mGameState.flyer = new Entity(
+        {TILE_DIMENSION * 11.75f, TILE_DIMENSION * 10.0f}, // starting position
+        { TILE_DIMENSION, TILE_DIMENSION },    // scale
+        textureFlyer,                          // texture
+        NONE                                    // entity type
+    );
+
+    mGameState.flyer->setSpeed(200);
+    mGameState.flyer->setAcceleration({0.0f, 0.0f});
+    mGameState.flyer->setDirection(UP);
 
     /*
     ----------- FALLING BLOCKS -----------
@@ -162,6 +178,49 @@ void Level3::initialise()
 void Level3::update(float deltaTime)
 {
     UpdateMusicStream(mGameState.bgm);
+
+    mGameState.flyer->update(
+        deltaTime,      // delta time / fixed timestep
+        nullptr,        // player
+        mGameState.map, // map
+        nullptr,        // collidable entities
+        0               // col. entity count
+    );
+
+    if (mGameState.flyer){ // FLYER MOVEMENTS
+        static float startY = mGameState.flyer->getPosition().y;
+
+        // top and bottom limits
+        static float flyerTopY = startY - 150.0f;
+        static float flyerBottomY = startY + 150.0f;
+
+        static bool movingUp = true; // current direction
+        Vector2 pos = mGameState.flyer->getPosition();
+
+        if (movingUp){
+            pos.y -= mGameState.flyer->getSpeed() * deltaTime;
+            if (pos.y <= flyerTopY) movingUp = false; // go down
+        } 
+        else{
+            pos.y += mGameState.flyer->getSpeed() * deltaTime;
+            if (pos.y >= flyerBottomY) movingUp = true; // go up
+        }
+
+        mGameState.flyer->setPosition(pos);
+    }
+
+    // flyer collide with player on -> lose
+    if (mGameState.flyer->isColliding(mGameState.zorp)){
+        if (lives > 1){ // lose a life restart level
+            lives--;
+            initialise();
+            return;
+        } 
+        else{
+            mGameState.nextSceneID = 1; // TODO: UPDATE TO LOSE SCREEN
+            return;
+        }
+    }
 
     for (size_t i = 0; i < mGameState.fallingBlocks.size(); i++){ // falling blocks movement
         Entity* block = mGameState.fallingBlocks[i];
@@ -278,6 +337,8 @@ void Level3::render()
     mGameState.map->render();
     mGameState.zorp->render();
     // mGameState.zorp->displayCollider();
+    mGameState.flyer->render();
+    // mGameState.flyer->displayCollider();
     mGameState.rocket->render();
     // mGameState.rocket->displayCollider();
     for (Entity* block : mGameState.fallingBlocks){
@@ -320,6 +381,7 @@ void Level3::shutdown()
     delete mGameState.bg;
     delete mGameState.map;
     delete mGameState.zorp;
+    delete mGameState.flyer;
     // delete mGameState.rocket;
     UnloadTexture(textureRocketStation);
     UnloadTexture(textureRocketMov1);
