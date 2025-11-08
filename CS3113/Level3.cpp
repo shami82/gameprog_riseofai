@@ -19,7 +19,7 @@ void Level3::initialise()
    mGameState.lvlCompleteSound = LoadSound("assets/lvlcomplete.wav");
    SetSoundVolume(mGameState.lvlCompleteSound, 1.2f);
    mGameState.jumpSound = LoadSound("assets/jump.wav");
-   SetSoundVolume(mGameState.jumpSound, 0.1f);
+   SetSoundVolume(mGameState.jumpSound, 0.08f);
 
    textureZorp = LoadTexture("assets/zorpsheet.PNG");
    textureFallingBlock = LoadTexture("assets/plan3fall.png");
@@ -258,7 +258,7 @@ void Level3::update(float deltaTime)
       }
 
       // next lvl when out of frame
-      if (pos.y + mGameState.rocket->getScale().y < -350.0f){
+      if (pos.y + mGameState.rocket->getScale().y < -400.0f){
          mGameState.nextSceneID = 5; // TODO: UPDATE WIN SCREEN
       }
    }
@@ -277,13 +277,13 @@ void Level3::render()
    mGameState.bg->render();
    mGameState.map->render();
    mGameState.zorp->render();
-   mGameState.zorp->displayCollider();
+//    mGameState.zorp->displayCollider();
    mGameState.rocket->render();
-   mGameState.rocket->displayCollider();
+//    mGameState.rocket->displayCollider();
    for (Entity* block : mGameState.fallingBlocks){
       if (block && block->isActive()){
          block->render();
-         block->displayCollider();
+        //  block->displayCollider();
       }
    }
    EndMode2D();

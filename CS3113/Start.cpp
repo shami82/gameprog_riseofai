@@ -30,7 +30,7 @@ void Start::initialise()
       PLAYER                                    // entity type
    );
 
-    mGameState.bgm = LoadMusicStream("assets/the_search.mp3");
+    mGameState.bgm = LoadMusicStream("assets/void.mp3");
     SetMusicVolume(mGameState.bgm, 0.50f);
     PlayMusicStream(mGameState.bgm);
 
@@ -44,6 +44,7 @@ void Start::initialise()
 
 void Start::update(float deltaTime)
 {
+    UpdateMusicStream(mGameState.bgm);
     if (IsKeyPressed(KEY_ENTER)){ mGameState.nextSceneID = 2; } // go to lvl 1
 }
 

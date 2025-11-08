@@ -15,7 +15,7 @@ void Level2::initialise()
    mGameState.lvlCompleteSound = LoadSound("assets/lvlcomplete.wav");
    SetSoundVolume(mGameState.lvlCompleteSound, 1.2f);
    mGameState.jumpSound = LoadSound("assets/jump.wav");
-   SetSoundVolume(mGameState.jumpSound, 0.1f);
+   SetSoundVolume(mGameState.jumpSound, 0.08f);
 
    textureZorp = LoadTexture("assets/zorpsheet.PNG");
    textureBG = LoadTexture("assets/spacebg.PNG");
@@ -276,7 +276,7 @@ void Level2::update(float deltaTime)
       }
 
       // next lvl when out of frame
-      if (pos.y + mGameState.rocket->getScale().y < -250.0f){
+      if (pos.y + mGameState.rocket->getScale().y < 20.0f){
          mGameState.nextSceneID = 4; // TODO: UPDATE WIN SCREEN
       }
    }
@@ -295,17 +295,17 @@ void Level2::render()
    mGameState.bg->render();
    mGameState.map->render();
    mGameState.zorp->render();
-   mGameState.zorp->displayCollider();
+//    mGameState.zorp->displayCollider();
    mGameState.flyer->render();
-   mGameState.flyer->displayCollider();
+//    mGameState.flyer->displayCollider();
    mGameState.flyer2->render();
-   mGameState.flyer2->displayCollider();
+//    mGameState.flyer2->displayCollider();
    mGameState.rocket->render();
-   mGameState.rocket->displayCollider();
+//    mGameState.rocket->displayCollider();
    for (Entity* block : mGameState.fallingBlocks){
       if (block && block->isActive()){
          block->render();
-         block->displayCollider();
+        //  block->displayCollider();
       }
    }
    EndMode2D();

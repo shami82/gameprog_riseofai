@@ -8,7 +8,7 @@ void End::initialise()
 {
     mGameState.nextSceneID = -1;
 
-    mGameState.bgm = LoadMusicStream("assets/win.wav");
+    mGameState.bgm = LoadMusicStream("assets/void.mp3");
     SetMusicVolume(mGameState.bgm, 0.50f);
     PlayMusicStream(mGameState.bgm);
 
@@ -44,6 +44,7 @@ void End::initialise()
 
 void End::update(float deltaTime)
 {
+    UpdateMusicStream(mGameState.bgm);
     if (IsKeyPressed(KEY_ENTER)){ mGameState.nextSceneID = 0; } // restart at home
 }
 

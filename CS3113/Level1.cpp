@@ -19,7 +19,7 @@ void Level1::initialise()
    mGameState.lvlCompleteSound = LoadSound("assets/lvlcomplete.wav");
    SetSoundVolume(mGameState.lvlCompleteSound, 1.2f);
    mGameState.jumpSound = LoadSound("assets/jump.wav");
-   SetSoundVolume(mGameState.jumpSound, 0.1f);
+   SetSoundVolume(mGameState.jumpSound, 0.08f);
 
    textureZorp = LoadTexture("assets/zorpsheet.PNG");
    textureFallingBlock = LoadTexture("assets/plan1fall.png");
@@ -360,17 +360,17 @@ void Level1::render()
    mGameState.bg->render();
    mGameState.map->render();
    mGameState.zorp->render();
-   mGameState.zorp->displayCollider();
+   // mGameState.zorp->displayCollider();
    mGameState.flyer->render();
-   mGameState.flyer->displayCollider();
+   // mGameState.flyer->displayCollider();
    mGameState.wanderer->render();
-   mGameState.wanderer->displayCollider();
+   // mGameState.wanderer->displayCollider();
    mGameState.rocket->render();
-   mGameState.rocket->displayCollider();
+   // mGameState.rocket->displayCollider();
    for (Entity* block : mGameState.fallingBlocks){
       if (block && block->isActive()){
          block->render();
-         block->displayCollider();
+         // block->displayCollider();
       }
    }
    EndMode2D();
