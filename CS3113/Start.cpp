@@ -30,9 +30,9 @@ void Start::initialise()
       PLAYER                                    // entity type
    );
 
-    // mGameState.bgm = LoadMusicStream("assets/the_search.mp3");
-    // SetMusicVolume(mGameState.bgm, 0.33f);
-    // PlayMusicStream(mGameState.bgm);
+    mGameState.bgm = LoadMusicStream("assets/the_search.mp3");
+    SetMusicVolume(mGameState.bgm, 0.50f);
+    PlayMusicStream(mGameState.bgm);
 
     mGameState.bg = new Entity(
         mOrigin,                                        // position
@@ -67,6 +67,7 @@ void Start::render()
 void Start::shutdown()
 {
     delete mGameState.bg;
+    delete mGameState.zorp;
 
-    // UnloadMusicStream(mGameState.bgm);
+    UnloadMusicStream(mGameState.bgm);
 }

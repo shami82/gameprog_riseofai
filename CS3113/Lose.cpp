@@ -8,6 +8,7 @@ void Lose::initialise()
 {
     textureBG = LoadTexture("assets/losescreen.PNG");
     mGameState.nextSceneID = 0;
+    resetLives(); // make the lives go back to 3 instead of 1/0
 
     textureZorp = LoadTexture("assets/zorpsheet.PNG");
     /*
@@ -44,7 +45,6 @@ void Lose::initialise()
 
 void Lose::update(float deltaTime)
 {
-    mGameState.lives = 3; // make the lives go back to 3 instead of 1/0
     if (IsKeyPressed(KEY_ENTER)){ mGameState.nextSceneID = 2; } // restart at level 1
 }
 

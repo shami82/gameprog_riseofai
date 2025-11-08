@@ -12,9 +12,9 @@ void Level1::initialise()
 
    mGameState.nextSceneID = 0; // "don't switch scenes yet"-state
 
-   // mGameState.bgm = LoadMusicStream("assets/the_search.mp3");
-   // SetMusicVolume(mGameState.bgm, 0.33f);
-   // PlayMusicStream(mGameState.bgm);
+   mGameState.bgm = LoadMusicStream("assets/the_search.mp3");
+   SetMusicVolume(mGameState.bgm, 0.5f);
+   PlayMusicStream(mGameState.bgm);
 
    // mGameState.jumpSound = LoadSound("assets/game/Dirt Jump.wav");
 
@@ -74,7 +74,7 @@ void Level1::initialise()
 
    mGameState.zorp->setJumpingPower(500.0f);
    mGameState.zorp->setColliderDimensions({
-      mGameState.zorp->getScale().x * 0.7f,
+      mGameState.zorp->getScale().x * 0.65f,
       mGameState.zorp->getScale().y
    });
    mGameState.zorp->setSpeed(165);
@@ -163,7 +163,7 @@ void Level1::initialise()
 
 void Level1::update(float deltaTime)
 {
-   // UpdateMusicStream(mGameState.bgm);
+   UpdateMusicStream(mGameState.bgm);
 
    mGameState.flyer->update(
       deltaTime,      // delta time / fixed timestep
@@ -197,8 +197,8 @@ void Level1::update(float deltaTime)
 
    // flyer collide with player on -> lose
    if (mGameState.flyer->isColliding(mGameState.zorp)){
-      if (mGameState.lives > 1){ // lose a life restart level
-         mGameState.lives--;
+      if (lives > 1){ // lose a life restart level
+         lives--;
          initialise();
          return;
       } 
@@ -231,8 +231,8 @@ void Level1::update(float deltaTime)
 
    // wanderer collide with player on -> lose
    if (mGameState.wanderer->isColliding(mGameState.zorp)){
-      if (mGameState.lives > 1){ // lose a life restart level
-         mGameState.lives--;
+      if (lives > 1){ // lose a life restart level
+         lives--;
          initialise();
          return;
       } 
@@ -274,8 +274,8 @@ void Level1::update(float deltaTime)
    // block collide with player on -> lose
    for (Entity* block : activeBlocks){
       if (block->isColliding(mGameState.zorp) && block->getVelocity().y > 0){
-         if (mGameState.lives > 1){ // lose a life restart level
-            mGameState.lives--;
+         if (lives > 1){ // lose a life restart level
+            lives--;
             initialise();
             return;
          } 
@@ -290,8 +290,8 @@ void Level1::update(float deltaTime)
 
    // TODO: FIX WIN AND LOSE CONDITION FOR THIS
    if (mGameState.zorp->getPosition().y > END_GAME_THRESHOLD){ // falling off screen
-      if (mGameState.lives > 1){ // lose a life restart level
-         mGameState.lives--;
+      if (lives > 1){ // lose a life restart level
+         lives--;
          initialise();
          return;
       } 
@@ -367,7 +367,7 @@ void Level1::render()
 
    // rendering the hearts for lives
    const float padding = 20.0f;
-   for (int i = 0; i < mGameState.lives; i++){
+   for (int i = 0; i < lives; i++){
       Rectangle textureArea = { 
          0, 0, 
          (float)textureHeart.width, (float)textureHeart.height 
