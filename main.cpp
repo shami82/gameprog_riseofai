@@ -71,7 +71,9 @@ void processInput()
     if      (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) gCurrentScene->getState().zorp->moveLeft();
     else if (IsKeyDown(KEY_D)|| IsKeyDown(KEY_RIGHT)) gCurrentScene->getState().zorp->moveRight();
 
-    if (IsKeyPressed(KEY_W || IsKeyDown(KEY_UP)) && 
+    if (IsKeyPressed(KEY_W) && 
+        gCurrentScene->getState().zorp->isCollidingBottom() ||
+        IsKeyPressed(KEY_UP) && 
         gCurrentScene->getState().zorp->isCollidingBottom())
     {
         gCurrentScene->getState().zorp->jump();
