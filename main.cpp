@@ -6,7 +6,7 @@ constexpr int SCREEN_WIDTH     = 990, //990
               FPS              = 120,
               NUMBER_OF_LEVELS = 6; //6
 
-constexpr Vector2 ORIGIN      = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
+constexpr Vector2 ORIGIN       = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
             
 constexpr float FIXED_TIMESTEP = 1.0f / 60.0f;
 
@@ -18,12 +18,12 @@ float gPreviousTicks   = 0.0f,
 Scene *gCurrentScene = nullptr;
 std::vector<Scene*> gLevels = {};
 
-Start *gStart = nullptr;
-Lose *gLose = nullptr;
+Start *gStart   = nullptr;
+Lose *gLose     = nullptr;
 Level1 *gLevel1 = nullptr;
 Level2 *gLevel2 = nullptr;
 Level3 *gLevel3 = nullptr;
-End *gEnd = nullptr;
+End *gEnd       = nullptr;
 
 
 // Function Declarations
@@ -76,7 +76,7 @@ void processInput()
         gCurrentScene->getState().zorp->isCollidingBottom())
     {
         gCurrentScene->getState().zorp->jump();
-        PlaySound(gCurrentScene->getState().jumpSound);
+        // PlaySound(gCurrentScene->getState().jumpSound);
     }
 
     if (GetLength(gCurrentScene->getState().zorp->getMovement()) > 1.0f) 
