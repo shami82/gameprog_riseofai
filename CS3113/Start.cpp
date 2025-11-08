@@ -7,7 +7,7 @@ Start::~Start() { shutdown(); }
 void Start::initialise()
 {
     textureBG = LoadTexture("assets/startscreen.PNG");
-    mGameState.nextSceneID = 0;
+    mGameState.nextSceneID = -1;
 
     textureZorp = LoadTexture("assets/zorpsheet.PNG");
     /*

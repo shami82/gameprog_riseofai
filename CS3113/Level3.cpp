@@ -11,13 +11,15 @@ void Level3::initialise()
    mGameState.blockWillFall.clear();
    mGameState.blockFallTimers.clear();
 
-   mGameState.nextSceneID = 0; // "don't switch scenes yet"-state
+   mGameState.nextSceneID = -1; // "don't switch scenes yet"-state
 
    mGameState.bgm = LoadMusicStream("assets/the_search.mp3");
-   SetMusicVolume(mGameState.bgm, 0.5f);
+   SetMusicVolume(mGameState.bgm, 0.7f);
    PlayMusicStream(mGameState.bgm);
-
-   // mGameState.jumpSound = LoadSound("assets/game/Dirt Jump.wav");
+   mGameState.lvlCompleteSound = LoadSound("assets/lvlcomplete.wav");
+   SetSoundVolume(mGameState.lvlCompleteSound, 1.2f);
+   mGameState.jumpSound = LoadSound("assets/jump.wav");
+   SetSoundVolume(mGameState.jumpSound, 0.1f);
 
    textureZorp = LoadTexture("assets/zorpsheet.PNG");
    textureFallingBlock = LoadTexture("assets/plan3fall.png");
@@ -230,6 +232,7 @@ void Level3::update(float deltaTime)
       rocketReached = true; // trigger animation
       mGameState.zorp->deactivate(); // hide player
       mGameState.zorp->setColliderDimensions({0.0f,0.0f});
+      PlaySound(mGameState.lvlCompleteSound);
    }
 
    if (rocketReached){// animate rocket moving up and switching
@@ -317,7 +320,10 @@ void Level3::shutdown()
    delete mGameState.bg;
    delete mGameState.map;
    delete mGameState.zorp;
-   delete mGameState.rocket;
+   // delete mGameState.rocket;
+   UnloadTexture(textureRocketStation);
+   UnloadTexture(textureRocketMov1);
+   UnloadTexture(textureRocketMov2);
 
    for (Entity* block : mGameState.fallingBlocks){
       delete block;
@@ -327,10 +333,8 @@ void Level3::shutdown()
    mGameState.blockFallTimers.clear();
 
    UnloadTexture(textureHeart);
-   UnloadTexture(textureRocketStation);
-   UnloadTexture(textureRocketMov1);
-   UnloadTexture(textureRocketMov2);
 
    UnloadMusicStream(mGameState.bgm);
-   // UnloadSound(mGameState.jumpSound);
+   UnloadSound(mGameState.lvlCompleteSound);
+   UnloadSound(mGameState.jumpSound);
 }

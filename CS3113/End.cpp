@@ -6,7 +6,7 @@ End::~End() { shutdown(); }
 
 void End::initialise()
 {
-    mGameState.nextSceneID = 0;
+    mGameState.nextSceneID = -1;
 
     mGameState.bgm = LoadMusicStream("assets/win.wav");
     SetMusicVolume(mGameState.bgm, 0.50f);
@@ -44,7 +44,7 @@ void End::initialise()
 
 void End::update(float deltaTime)
 {
-    if (IsKeyPressed(KEY_ENTER)){ mGameState.nextSceneID = 2; } // go to lvl 1
+    if (IsKeyPressed(KEY_ENTER)){ mGameState.nextSceneID = 0; } // restart at home
 }
 
 void End::render()

@@ -75,7 +75,7 @@ void processInput()
         gCurrentScene->getState().zorp->isCollidingBottom())
     {
         gCurrentScene->getState().zorp->jump();
-        // PlaySound(gCurrentScene->getState().jumpSound);
+        PlaySound(gCurrentScene->getState().jumpSound);
     }
 
     if (GetLength(gCurrentScene->getState().zorp->getMovement()) > 1.0f) 
@@ -151,7 +151,7 @@ int main(void)
         processInput();
         update();
 
-        if (gCurrentScene->getState().nextSceneID > 0)
+        if (gCurrentScene->getState().nextSceneID >= 0)
         {
             int id = gCurrentScene->getState().nextSceneID;
             switchToScene(gLevels[id]);

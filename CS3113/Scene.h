@@ -18,6 +18,8 @@ struct GameState
     std::vector<float> blockFallTimers = {};
 
     Music bgm;
+    Sound loseSound;
+    Sound lvlCompleteSound;
     Sound jumpSound;
 
     Camera2D camera;
