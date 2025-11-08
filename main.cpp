@@ -36,7 +36,6 @@ void shutdown();
 
 void switchToScene(Scene *scene)
 {   
-    if (gCurrentScene) gCurrentScene->shutdown(); // to clean up before switching
     gCurrentScene = scene;
     gCurrentScene->initialise();
 }
