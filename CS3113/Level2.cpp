@@ -20,6 +20,7 @@ void Level2::initialise()
     textureZorp = LoadTexture("assets/zorpsheet.PNG");
     textureBG = LoadTexture("assets/spacebg.PNG");
     textureFlyer = LoadTexture("assets/flyer.PNG");
+    textureWanderer = LoadTexture("assets/wanderer.PNG");
     textureHeart = LoadTexture("assets/heart.PNG");
     textureRocketStation = LoadTexture("assets/rocketstation.PNG");
     textureRocketMov1 = LoadTexture("assets/rocketmov1.PNG");
@@ -106,6 +107,21 @@ void Level2::initialise()
     mGameState.flyer2->setSpeed(100);
     mGameState.flyer2->setAcceleration({0.0f, 0.0f});
     mGameState.flyer2->setDirection(DOWN);
+
+    /*
+        ----------- WANDERER -----------
+    */
+
+    mGameState.wanderer = new Entity(
+        {TILE_DIMENSION * 7.75f, TILE_DIMENSION * 6.0f}, // starting position
+        { TILE_DIMENSION * (15.0f/32.0f), TILE_DIMENSION * (14.0f/32.0f)},    // scale
+        textureWanderer,                          // texture
+        NONE                                    // entity type
+    );
+
+    mGameState.wanderer->setSpeed(80);
+    mGameState.wanderer->setAcceleration({0.0f, ACCELERATION_OF_GRAVITY});
+    mGameState.wanderer->setDirection(RIGHT);
 
     /*
         ----------- ROCKET (THE GOAL) -----------
@@ -202,7 +218,7 @@ void Level2::update(float deltaTime)
         static float flyer2TopY = startY - 180.0f;
         static float flyer2BottomY = startY + 180.0f;
 
-        static bool movingUp = true; // current direction
+        static bool movingUp = false; // current direction
         Vector2 pos = mGameState.flyer2->getPosition();
 
         if (movingUp){
@@ -219,6 +235,40 @@ void Level2::update(float deltaTime)
 
     // flyer2 collide with player on -> lose
     if (mGameState.flyer2->isColliding(mGameState.zorp)){
+        if (lives > 1){ // lose a life restart level
+            lives--;
+            initialise();
+            return;
+        } 
+        else{
+            mGameState.nextSceneID = 1; // TODO: UPDATE TO LOSE SCREEN
+            return;
+        }
+    }
+
+    if (mGameState.wanderer){ // WANDERER MOVEMENTS
+        static float startX = mGameState.wanderer->getPosition().x;
+
+        float moveLeft  = startX - TILE_DIMENSION; // 1 left
+        float moveRight = startX + TILE_DIMENSION; // 1 right
+
+        Vector2 pos = mGameState.wanderer->getPosition();
+
+        if (mGameState.wanderer->getDirection() == LEFT){
+            pos.x -= mGameState.wanderer->getSpeed() * deltaTime;
+            if (pos.x <= moveLeft) mGameState.wanderer->setDirection(RIGHT); // move right
+        } 
+        else{
+            pos.x += mGameState.wanderer->getSpeed() * deltaTime;
+            if (pos.x >= moveRight) mGameState.wanderer->setDirection(LEFT); // move left
+        }
+
+        mGameState.wanderer->setPosition(pos);
+        mGameState.wanderer->update(deltaTime, nullptr, mGameState.map, nullptr, 0);
+    }
+
+    // wanderer collide with player on -> lose
+    if (mGameState.wanderer->isColliding(mGameState.zorp)){
         if (lives > 1){ // lose a life restart level
             lives--;
             initialise();
@@ -300,6 +350,8 @@ void Level2::render()
     // mGameState.flyer->displayCollider();
     mGameState.flyer2->render();
     // mGameState.flyer2->displayCollider();
+    mGameState.wanderer->render();
+    // mGameState.wanderer->displayCollider();
     mGameState.rocket->render();
     // mGameState.rocket->displayCollider();
     for (Entity* block : mGameState.fallingBlocks){
@@ -344,6 +396,7 @@ void Level2::shutdown()
     delete mGameState.zorp;
     delete mGameState.flyer;
     delete mGameState.flyer2;
+    delete mGameState.wanderer;
     // delete mGameState.rocket;
     UnloadTexture(textureRocketStation);
     UnloadTexture(textureRocketMov1);
