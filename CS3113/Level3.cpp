@@ -1,11 +1,11 @@
-#include "Level1.h"
+#include "Level3.h"
 
-Level1::Level1()                                      : Scene { {0.0f}, nullptr   } {}
-Level1::Level1(Vector2 origin, const char *bgHexCode) : Scene { origin, bgHexCode } {}
+Level3::Level3()                                      : Scene { {0.0f}, nullptr   } {}
+Level3::Level3(Vector2 origin, const char *bgHexCode) : Scene { origin, bgHexCode } {}
 
-Level1::~Level1() { shutdown(); }
+Level3::~Level3() { shutdown(); }
 
-void Level1::initialise()
+void Level3::initialise()
 {
    mGameState.fallingBlocks.clear();
    mGameState.blockWillFall.clear();
@@ -20,10 +20,8 @@ void Level1::initialise()
    // mGameState.jumpSound = LoadSound("assets/game/Dirt Jump.wav");
 
    textureZorp = LoadTexture("assets/zorpsheet.PNG");
-   textureFallingBlock = LoadTexture("assets/plan1fall.png");
+   textureFallingBlock = LoadTexture("assets/plan3fall.png");
    textureBG = LoadTexture("assets/spacebg.PNG");
-   textureFlyer = LoadTexture("assets/flyer.PNG");
-   textureWanderer = LoadTexture("assets/wanderer.PNG");
    textureHeart = LoadTexture("assets/heart.PNG");
    textureRocketStation = LoadTexture("assets/rocketstation.PNG");
    textureRocketMov1 = LoadTexture("assets/rocketmov1.PNG");
@@ -45,7 +43,7 @@ void Level1::initialise()
    mGameState.map = new Map(
       LEVEL_WIDTH, LEVEL_HEIGHT,   // map grid cols & rows
       (unsigned int *) mLevelData, // grid data
-      "assets/plan1reg.PNG",       // texture filepath
+      "assets/plan3reg.PNG",       // texture filepath
       TILE_DIMENSION,              // tile size
       1, 1,                        // texture cols & rows
       mOrigin                      // in-game origin
@@ -83,41 +81,37 @@ void Level1::initialise()
    mGameState.zorp->setDirection(UP);
 
    /*
-      ----------- FLYER -----------
-   */
-
-   mGameState.flyer = new Entity(
-      {TILE_DIMENSION * 11.75f, TILE_DIMENSION * 1.0f}, // starting position
-      { TILE_DIMENSION, TILE_DIMENSION },    // scale
-      textureFlyer,                          // texture
-      NONE                                    // entity type
-   );
-
-   mGameState.flyer->setSpeed(200);
-   mGameState.flyer->setAcceleration({0.0f, 0.0f});
-   mGameState.flyer->setDirection(UP);
-
-   /*
-      ----------- WANDERER -----------
-   */
-
-   mGameState.wanderer = new Entity(
-      {TILE_DIMENSION * 4.75f, TILE_DIMENSION * 10.0f}, // starting position
-      { TILE_DIMENSION * (15.0f/32.0f), TILE_DIMENSION * (14.0f/32.0f)},    // scale
-      textureWanderer,                          // texture
-      NONE                                    // entity type
-   );
-
-   mGameState.wanderer->setSpeed(80);
-   mGameState.wanderer->setAcceleration({0.0f, ACCELERATION_OF_GRAVITY});
-   mGameState.wanderer->setDirection(RIGHT);
-
-   /*
    ----------- FALLING BLOCKS -----------
    */
-   for (int col = 6; col <= 9; col++){ // new entity per block
-      Vector2 blockpos = { TILE_DIMENSION * ((float)col + 0.75f), TILE_DIMENSION * 2.5f }; // row 3, cols 6–9
+   for (int col = 9; col <= 10; col++){ // new entity per block
+      Vector2 blockpos = { TILE_DIMENSION * ((float)col + 0.75f), TILE_DIMENSION * 7.5f }; // row 9, cols 9-10
 
+      Entity* block = new Entity(
+         blockpos,                              // starting position
+         { TILE_DIMENSION, TILE_DIMENSION },    // scale
+         textureFallingBlock,                   // texture
+         BLOCK                                  //entity type
+      );
+
+      block->setAcceleration({0.0f, 0.0f}); // start stationary
+      block->setSpeed(0);
+      block->setColliderDimensions({
+         TILE_DIMENSION,
+         TILE_DIMENSION * 5.5f // detecting 4 blocks below
+      });
+
+      mGameState.fallingBlocks.push_back(block);
+      mGameState.blockWillFall.push_back(false);
+      mGameState.blockFallTimers.push_back(0.0f);
+   }
+
+   for (int col = 8; col <= 11; col++){ // new entity per block (SKIP COL 10)
+      if (col == 10) continue; // skipping col 10
+      Vector2 blockpos = {0.0f, 0.0f};
+      if (col == 11)
+        blockpos = { TILE_DIMENSION * ((float)col + 0.75f), TILE_DIMENSION * 1.5f }; // row 2, cols 8,9,11
+      else
+        blockpos = { TILE_DIMENSION * ((float)col + 0.75f), TILE_DIMENSION * 0.5f };
       Entity* block = new Entity(
          blockpos,                              // starting position
          { TILE_DIMENSION, TILE_DIMENSION },    // scale
@@ -142,7 +136,7 @@ void Level1::initialise()
    */
 
    mGameState.rocket = new Entity(
-      {TILE_DIMENSION * 13.75f, TILE_DIMENSION * 1.75f}, // starting position
+      {TILE_DIMENSION * 3.5f, TILE_DIMENSION * -1.0f}, // starting position
       { TILE_DIMENSION * (28.0f/16.0f), TILE_DIMENSION * (32.0f/16.0f)},    // scale
       textureRocketStation,                          // texture
       NONE                                    // entity type
@@ -163,86 +157,9 @@ void Level1::initialise()
    mGameState.camera.zoom = 1.25f;                               // zoom more
 }
 
-void Level1::update(float deltaTime)
+void Level3::update(float deltaTime)
 {
    UpdateMusicStream(mGameState.bgm);
-
-   mGameState.flyer->update(
-      deltaTime,      // delta time / fixed timestep
-      nullptr,        // player
-      mGameState.map, // map
-      nullptr,        // collidable entities
-      0               // col. entity count
-   );
-
-   if (mGameState.flyer){ // FLYER MOVEMENTS
-      static float startY = mGameState.flyer->getPosition().y;
-
-      // top and bottom limits
-      static float flyerTopY = startY - 180.0f;
-      static float flyerBottomY = startY + 180.0f;
-
-      static bool movingUp = true; // current direction
-      Vector2 pos = mGameState.flyer->getPosition();
-
-      if (movingUp){
-         pos.y -= mGameState.flyer->getSpeed() * deltaTime;
-         if (pos.y <= flyerTopY) movingUp = false; // go down
-      } 
-      else{
-         pos.y += mGameState.flyer->getSpeed() * deltaTime;
-         if (pos.y >= flyerBottomY) movingUp = true; // go up
-      }
-
-      mGameState.flyer->setPosition(pos);
-   }
-
-   // flyer collide with player on -> lose
-   if (mGameState.flyer->isColliding(mGameState.zorp)){
-      if (lives > 1){ // lose a life restart level
-         lives--;
-         initialise();
-         return;
-      } 
-      else{
-         mGameState.nextSceneID = 1; // TODO: UPDATE TO LOSE SCREEN
-         return;
-      }
-   }
-
-   if (mGameState.wanderer){ // WANDERER MOVEMENTS
-      static float startX = mGameState.wanderer->getPosition().x;
-
-      float moveLeft  = startX - TILE_DIMENSION; // 1 left
-      float moveRight = startX + TILE_DIMENSION; // 1 right
-
-      Vector2 pos = mGameState.wanderer->getPosition();
-
-      if (mGameState.wanderer->getDirection() == LEFT){
-         pos.x -= mGameState.wanderer->getSpeed() * deltaTime;
-         if (pos.x <= moveLeft) mGameState.wanderer->setDirection(RIGHT); // move right
-      } 
-      else{
-         pos.x += mGameState.wanderer->getSpeed() * deltaTime;
-         if (pos.x >= moveRight) mGameState.wanderer->setDirection(LEFT); // move left
-      }
-
-      mGameState.wanderer->setPosition(pos);
-      mGameState.wanderer->update(deltaTime, nullptr, mGameState.map, nullptr, 0);
-   }
-
-   // wanderer collide with player on -> lose
-   if (mGameState.wanderer->isColliding(mGameState.zorp)){
-      if (lives > 1){ // lose a life restart level
-         lives--;
-         initialise();
-         return;
-      } 
-      else{
-         mGameState.nextSceneID = 1; // TODO: UPDATE TO LOSE SCREEN
-         return;
-      }
-   }
 
    for (size_t i = 0; i < mGameState.fallingBlocks.size(); i++){ // falling blocks movement
       Entity* block = mGameState.fallingBlocks[i];
@@ -282,13 +199,13 @@ void Level1::update(float deltaTime)
    for (Entity* block : activeBlocks){
       if (block->isColliding(mGameState.zorp) && block->getVelocity().y > 0){
          if (lives > 1){ // lose a life restart level
-            lives--;
-            initialise();
-            return;
+             lives--;
+             initialise();
+             return;
          } 
          else{
-            mGameState.nextSceneID = 1; // TODO: UPDATE LOSE SCREEN
-            return;
+             mGameState.nextSceneID = 1; // TODO: UPDATE LOSE SCREEN
+             return;
          }
       }
    }
@@ -338,8 +255,8 @@ void Level1::update(float deltaTime)
       }
 
       // next lvl when out of frame
-      if (pos.y + mGameState.rocket->getScale().y < -50.0f){
-         mGameState.nextSceneID = 3; // TODO: UPDATE WIN SCREEN
+      if (pos.y + mGameState.rocket->getScale().y < -350.0f){
+         mGameState.nextSceneID = 5; // TODO: UPDATE WIN SCREEN
       }
    }
 
@@ -349,7 +266,7 @@ void Level1::update(float deltaTime)
 
 }
 
-void Level1::render()
+void Level3::render()
 {
    ClearBackground(ColorFromHex(mBGColourHexCode));
    BeginMode2D(mGameState.camera);
@@ -358,10 +275,6 @@ void Level1::render()
    mGameState.map->render();
    mGameState.zorp->render();
    mGameState.zorp->displayCollider();
-   mGameState.flyer->render();
-   mGameState.flyer->displayCollider();
-   mGameState.wanderer->render();
-   mGameState.wanderer->displayCollider();
    mGameState.rocket->render();
    mGameState.rocket->displayCollider();
    for (Entity* block : mGameState.fallingBlocks){
@@ -399,13 +312,11 @@ void Level1::render()
 
 }
 
-void Level1::shutdown()
+void Level3::shutdown()
 {
    delete mGameState.bg;
    delete mGameState.map;
    delete mGameState.zorp;
-   delete mGameState.flyer;
-   delete mGameState.wanderer;
    delete mGameState.rocket;
 
    for (Entity* block : mGameState.fallingBlocks){

@@ -274,7 +274,7 @@ void Level2::update(float deltaTime)
 
       // next lvl when out of frame
       if (pos.y + mGameState.rocket->getScale().y < -50.0f){
-         mGameState.nextSceneID = 3; // TODO: UPDATE WIN SCREEN
+         mGameState.nextSceneID = 4; // TODO: UPDATE WIN SCREEN
       }
    }
 

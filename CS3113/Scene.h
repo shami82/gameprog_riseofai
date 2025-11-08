@@ -15,6 +15,7 @@ struct GameState
     Map *map;
     std::vector<Entity*> fallingBlocks = {};
     std::vector<bool> blockWillFall = {};
+    std::vector<float> blockFallTimers = {};
 
     Music bgm;
     Sound jumpSound;
