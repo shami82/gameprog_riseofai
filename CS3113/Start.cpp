@@ -59,7 +59,7 @@ void Start::render()
     int fontSize = 30;
     int textWidth = MeasureText(msg, fontSize);
     DrawText(msg,
-             static_cast<int>(mOrigin.x - textWidth / 2),
+             static_cast<int>((mOrigin.x - textWidth / 2) + 10.0f),
              static_cast<int>(mOrigin.y + 85.0f),
              fontSize,
              WHITE);

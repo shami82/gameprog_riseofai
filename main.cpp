@@ -1,10 +1,10 @@
 #include "CS3113/End.h"
 
 // Global Constants
-constexpr int SCREEN_WIDTH     = 990, //990
-              SCREEN_HEIGHT    = 720, //720
+constexpr int SCREEN_WIDTH     = 990,
+              SCREEN_HEIGHT    = 720,
               FPS              = 120,
-              NUMBER_OF_LEVELS = 6; //6
+              NUMBER_OF_LEVELS = 6;
 
 constexpr Vector2 ORIGIN       = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
             
@@ -59,7 +59,7 @@ void initialise()
     gLevels.push_back(gLevel3);
     gLevels.push_back(gEnd);
 
-    switchToScene(gLevels[0]); // SWITCH AROUND TO FOCUS ON LEVELS (SHOULD BE gLevels[0])
+    switchToScene(gLevels[0]);
 
     SetTargetFPS(FPS);
 }
@@ -114,7 +114,7 @@ void render()
 {
     BeginDrawing();
 
-    // only use camera when level, not startscreen
+    // use camera when level has camera
     if (gCurrentScene->getState().camera.target.x != 0 || gCurrentScene->getState().camera.target.y != 0){
         BeginMode2D(gCurrentScene->getState().camera);
         gCurrentScene->render();
@@ -123,8 +123,6 @@ void render()
     else{
         gCurrentScene->render();
     }
-
-    // gCurrentScene->render();
 
     EndDrawing();
 }

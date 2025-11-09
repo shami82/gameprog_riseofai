@@ -54,15 +54,15 @@ void End::render()
 
     mGameState.bg->render();
 
-    // // instr to start
-    // const char* msg = "Press [Enter] to Start";
-    // int fontSize = 30;
-    // int textWidth = MeasureText(msg, fontSize);
-    // DrawText(msg,
-    //          static_cast<int>(mOrigin.x - textWidth / 2),
-    //          static_cast<int>(mOrigin.y + 85.0f),
-    //          fontSize,
-    //          WHITE);
+    // instr to restart
+    const char* msg = "Press [Enter] to Restart";
+    int fontSize = 25;
+    int textWidth = MeasureText(msg, fontSize);
+    DrawText(msg,
+             static_cast<int>((mOrigin.x - textWidth / 2) - 90.0f),
+             static_cast<int>(mOrigin.y - 100.0f),
+             fontSize,
+             WHITE);
 }
 
 void End::shutdown()
