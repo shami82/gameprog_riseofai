@@ -221,7 +221,7 @@ void Level3::update(float deltaTime)
             return;
         } 
         else{
-            mGameState.nextSceneID = 1; // TODO: UPDATE TO LOSE SCREEN
+            mGameState.nextSceneID = 1;
             return;
         }
     }
@@ -269,7 +269,7 @@ void Level3::update(float deltaTime)
                 return;
             } 
             else{
-                mGameState.nextSceneID = 1; // TODO: UPDATE LOSE SCREEN
+                mGameState.nextSceneID = 1;
                 return;
             }
         }
@@ -277,7 +277,6 @@ void Level3::update(float deltaTime)
 
     Vector2 currentPlayerPosition = { mGameState.zorp->getPosition().x, mOrigin.y };
 
-    // TODO: FIX WIN AND LOSE CONDITION FOR THIS
     if (mGameState.zorp->getPosition().y > END_GAME_THRESHOLD){ // falling off screen
         if (lives > 1){ // lose a life restart level
             lives--;
@@ -285,7 +284,7 @@ void Level3::update(float deltaTime)
             return;
         } 
         else{
-            mGameState.nextSceneID = 1; // TODO: UPDATE TO LOSE SCREEN
+            mGameState.nextSceneID = 1;
             return;
         }
     }
@@ -322,7 +321,7 @@ void Level3::update(float deltaTime)
 
         // next lvl when out of frame
         if (pos.y + mGameState.rocket->getScale().y < -400.0f){
-            mGameState.nextSceneID = 5; // TODO: UPDATE WIN SCREEN
+            mGameState.nextSceneID = 5;
         }
     }
 
