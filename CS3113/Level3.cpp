@@ -44,12 +44,12 @@ void Level3::initialise()
         ----------- MAP -----------
     */
     mGameState.map = new Map(
-        LEVEL_WIDTH, LEVEL_HEIGHT,   // map grid cols & rows
-        (unsigned int *) mLevelData, // grid data
-        "assets/plan3reg.PNG",       // texture filepath
-        TILE_DIMENSION,              // tile size
-        1, 1,                        // texture cols & rows
-        mOrigin                      // in-game origin
+        LEVEL_WIDTH, LEVEL_HEIGHT,                      // map grid cols & rows
+        (unsigned int *) mLevelData,                    // grid data
+        "assets/plan3reg.PNG",                          // texture filepath
+        TILE_DIMENSION,                                 // tile size
+        1, 1,                                           // texture cols & rows
+        mOrigin                                         // in-game origin
     );
 
     /*
@@ -66,12 +66,12 @@ void Level3::initialise()
 
     mGameState.zorp = new Entity(
         {TILE_DIMENSION * 2.75f, TILE_DIMENSION * 10.0f}, // col, row
-        zorpScale,                                // scale
-        textureZorp,                              // texture file address
-        ATLAS,                                    // single image or atlas?
-        { 3, 4 },                                 // atlas dimensions
-        zorpAnimationAtlas,                       // actual atlas
-        PLAYER                                    // entity type
+        zorpScale,                                        // scale
+        textureZorp,                                      // texture file address
+        ATLAS,                                            // single image or atlas?
+        { 3, 4 },                                         // atlas dimensions
+        zorpAnimationAtlas,                               // actual atlas
+        PLAYER                                            // entity type
     );
 
     mGameState.zorp->setJumpingPower(500.0f);
@@ -89,9 +89,9 @@ void Level3::initialise()
 
     mGameState.flyer = new Entity(
         {TILE_DIMENSION * 11.75f, TILE_DIMENSION * 10.0f}, // starting position
-        { TILE_DIMENSION, TILE_DIMENSION },    // scale
-        textureFlyer,                          // texture
-        NONE                                    // entity type
+        { TILE_DIMENSION, TILE_DIMENSION },                // scale
+        textureFlyer,                                      // texture
+        NONE                                               // entity type
     );
 
     mGameState.flyer->setSpeed(200);
@@ -108,7 +108,7 @@ void Level3::initialise()
             blockpos,                              // starting position
             { TILE_DIMENSION, TILE_DIMENSION },    // scale
             textureFallingBlock,                   // texture
-            BLOCK                                  //entity type
+            BLOCK                                  // entity type
         );
 
         block->setAcceleration({0.0f, 0.0f}); // start stationary
@@ -154,10 +154,10 @@ void Level3::initialise()
     */
 
     mGameState.rocket = new Entity(
-        {TILE_DIMENSION * 3.5f, TILE_DIMENSION * -1.0f}, // starting position
-        { TILE_DIMENSION * (28.0f/16.0f), TILE_DIMENSION * (32.0f/16.0f)},    // scale
-        textureRocketStation,                          // texture
-        NONE                                    // entity type
+        {TILE_DIMENSION * 3.5f, TILE_DIMENSION * -1.0f},                   // starting position
+        { TILE_DIMENSION * (28.0f/16.0f), TILE_DIMENSION * (32.0f/16.0f)}, // scale
+        textureRocketStation,                                              // texture
+        NONE                                                               // entity type
     );
 
     // init for animating later
@@ -385,7 +385,6 @@ void Level3::shutdown()
     delete mGameState.map;
     delete mGameState.zorp;
     delete mGameState.flyer;
-    // delete mGameState.rocket;
     UnloadTexture(textureRocketStation);
     UnloadTexture(textureRocketMov1);
     UnloadTexture(textureRocketMov2);

@@ -40,12 +40,12 @@ void Level2::initialise()
         ----------- MAP -----------
     */
     mGameState.map = new Map(
-        LEVEL_WIDTH, LEVEL_HEIGHT,   // map grid cols & rows
-        (unsigned int *) mLevelData, // grid data
-        "assets/plan2reg.PNG",       // texture filepath
-        TILE_DIMENSION,              // tile size
-        1, 1,                        // texture cols & rows
-        mOrigin                      // in-game origin
+        LEVEL_WIDTH, LEVEL_HEIGHT,                      // map grid cols & rows
+        (unsigned int *) mLevelData,                    // grid data
+        "assets/plan2reg.PNG",                          // texture filepath
+        TILE_DIMENSION,                                 // tile size
+        1, 1,                                           // texture cols & rows
+        mOrigin                                         // in-game origin
     );
 
     /*
@@ -62,12 +62,12 @@ void Level2::initialise()
 
     mGameState.zorp = new Entity(
         {TILE_DIMENSION * 2.75f, TILE_DIMENSION * 10.0f}, // col, row
-        zorpScale,                                // scale
-        textureZorp,                              // texture file address
-        ATLAS,                                    // single image or atlas?
-        { 3, 4 },                                 // atlas dimensions
-        zorpAnimationAtlas,                       // actual atlas
-        PLAYER                                    // entity type
+        zorpScale,                                        // scale
+        textureZorp,                                      // texture file address
+        ATLAS,                                            // single image or atlas?
+        { 3, 4 },                                         // atlas dimensions
+        zorpAnimationAtlas,                               // actual atlas
+        PLAYER                                            // entity type
     );
 
     mGameState.zorp->setJumpingPower(500.0f);
@@ -84,9 +84,9 @@ void Level2::initialise()
 
     mGameState.flyer = new Entity(
         {TILE_DIMENSION * 4.75f, TILE_DIMENSION * 8.75f}, // starting position
-        { TILE_DIMENSION, TILE_DIMENSION },    // scale
-        textureFlyer,                          // texture
-        NONE                                    // entity type
+        { TILE_DIMENSION, TILE_DIMENSION },               // scale
+        textureFlyer,                                     // texture
+        NONE                                              // entity type
     );
 
     mGameState.flyer->setSpeed(100);
@@ -99,9 +99,9 @@ void Level2::initialise()
 
     mGameState.flyer2 = new Entity(
         {TILE_DIMENSION * 10.75f, TILE_DIMENSION * 8.75f}, // starting position
-        { TILE_DIMENSION, TILE_DIMENSION },    // scale
-        textureFlyer,                          // texture
-        NONE                                    // entity type
+        { TILE_DIMENSION, TILE_DIMENSION },                // scale
+        textureFlyer,                                      // texture
+        NONE                                               // entity type
     );
 
     mGameState.flyer2->setSpeed(100);
@@ -113,10 +113,10 @@ void Level2::initialise()
     */
 
     mGameState.wanderer = new Entity(
-        {TILE_DIMENSION * 7.75f, TILE_DIMENSION * 6.0f}, // starting position
-        { TILE_DIMENSION * (15.0f/32.0f), TILE_DIMENSION * (14.0f/32.0f)},    // scale
-        textureWanderer,                          // texture
-        NONE                                    // entity type
+        {TILE_DIMENSION * 7.75f, TILE_DIMENSION * 6.0f},                   // starting position
+        { TILE_DIMENSION * (15.0f/32.0f), TILE_DIMENSION * (14.0f/32.0f)}, // scale
+        textureWanderer,                                                   // texture
+        NONE                                                               // entity type
     );
 
     mGameState.wanderer->setSpeed(80);
@@ -128,10 +128,10 @@ void Level2::initialise()
     */
 
     mGameState.rocket = new Entity(
-        {TILE_DIMENSION * 14.25f, TILE_DIMENSION * 10.0f}, // starting position
-        { TILE_DIMENSION * (28.0f/16.0f), TILE_DIMENSION * (32.0f/16.0f)},    // scale
-        textureRocketStation,                          // texture
-        NONE                                    // entity type
+        {TILE_DIMENSION * 14.25f, TILE_DIMENSION * 10.0f},                 // starting position
+        { TILE_DIMENSION * (28.0f/16.0f), TILE_DIMENSION * (32.0f/16.0f)}, // scale
+        textureRocketStation,                                              // texture
+        NONE                                                               // entity type
     );
 
     // init for animating later
@@ -400,7 +400,6 @@ void Level2::shutdown()
     delete mGameState.flyer;
     delete mGameState.flyer2;
     delete mGameState.wanderer;
-    // delete mGameState.rocket;
     UnloadTexture(textureRocketStation);
     UnloadTexture(textureRocketMov1);
     UnloadTexture(textureRocketMov2);
