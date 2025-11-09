@@ -177,7 +177,7 @@ void Level3::initialise()
 
 void Level3::update(float deltaTime)
 {
-    if (IsKeyPressed(KEY_N)){ // for skipping level
+    if (IsKeyPressed(KEY_N) && IsKeyPressed(KEY_SPACE)){ // for skipping level
         mGameState.nextSceneID = 5;
         return;
     }
